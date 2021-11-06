@@ -1,0 +1,18 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: love-sports-user
+  cloud:
+    nacos:
+      discovery:
+        namespace: public
+        password: nacos
+        server-addr: 192.168.1.3:8848
+        username: nacos
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: defaultDataSource
+    password: 123456
+    url: jdbc:mysql://localhost:3306/love-sports-user?serverTimezone=UTC
+    username: root
