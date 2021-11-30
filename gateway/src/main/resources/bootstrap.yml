@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: love-sports-gateway
+  cloud:
+    nacos:
+      config:   #${spring.application.name}-${spring.profiles.active}.${file-extension}
+        server-addr: 192.168.1.111:8848
+        contextPath: /nacos
+        username: nacos
+        password: nacos
+        file-extension: yaml
+      discovery:
+        server-addr: 192.168.1.111:8848
+        namespace: public
+        username: nacos
+        password: nacos

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: love-sports-user
+  cloud:
+    nacos:
+      config:
+        contextPath: /nacos
+        username: nacos
+        password: nacos
+        server-addr: 192.168.1.111:8848
+        file-extension: yaml
+      discovery:
+        namespace: public
+        password: nacos
+        server-addr: 192.168.1.111:8848
+        username: nacos
