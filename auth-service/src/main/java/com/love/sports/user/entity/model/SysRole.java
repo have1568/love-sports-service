@@ -1,7 +1,8 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class SysRole extends CommonEntity {
+public class SysRole extends CommonModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -29,7 +30,7 @@ public class SysRole extends CommonEntity {
     private String roleKey;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "roles") //nappedBy 的值对应 SysUserInfo 类 的roles 属性名称
+    @ManyToMany(mappedBy = "roles") //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
     @ApiModelProperty(value = "用户", hidden = true)
     @ToString.Exclude
     private Set<SysUserInfo> users;
@@ -40,7 +41,7 @@ public class SysRole extends CommonEntity {
             inverseJoinColumns = {@JoinColumn(name = "resource_id", referencedColumnName = "resource_id")})
     @ApiModelProperty(value = "菜单", hidden = true)
     @ToString.Exclude
-    private Set<SysResource> resources;
+    private Set<SysResources> resources;
 
 
     @Column(name = "data_scope")

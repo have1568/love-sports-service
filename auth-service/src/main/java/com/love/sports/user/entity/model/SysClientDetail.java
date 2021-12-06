@@ -1,4 +1,4 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SysClientDetail implements Serializable {
+
+
     @Id
     @Column(name = "client_id", nullable = false, length = 256)
     private String clientId;

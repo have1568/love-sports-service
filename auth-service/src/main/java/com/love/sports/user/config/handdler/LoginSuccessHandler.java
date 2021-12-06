@@ -1,7 +1,9 @@
 package com.love.sports.user.config.handdler;
 
-import lombok.extern.log4j.Log4j2;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.alibaba.fastjson.JSON;
+import com.love.sports.user.common.Res;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -10,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Log4j2
+@Slf4j
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-
-        String s = new ObjectMapper().writeValueAsString(authentication);
-        log.info("Login Success : {}",s);
+        log.info(JSON.toJSONString(Res.success(JSON.toJSONString(authentication))));
+        httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        httpServletResponse.getWriter().write(JSON.toJSONString(Res.success(authentication.getDetails())));
     }
 }

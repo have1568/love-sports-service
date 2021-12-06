@@ -1,9 +1,10 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,10 +13,11 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "sys_user_info")
-public class SysUserInfo extends CommonEntity {
+public class SysUserInfo extends CommonModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="system_uuid")
+    @GenericGenerator(name="system_uuid",strategy="uuid")
     @Column(name = "user_id", nullable = false, length = 36)
     private String id;
 
@@ -41,7 +43,7 @@ public class SysUserInfo extends CommonEntity {
     @Column(name = "avatar_path", length = 300)
     private String avatarPath;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @ApiModelProperty(value = "用户角色")
     @JoinTable(name = "sys_users_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},

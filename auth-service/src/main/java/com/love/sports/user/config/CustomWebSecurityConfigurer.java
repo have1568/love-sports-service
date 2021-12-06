@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
@@ -39,7 +38,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private RedisIndexedSessionRepository sessionRepository;
 
     @Bean
-    public SessionRegistry sessionRegistry(){
+    public SessionRegistry sessionRegistry() {
         return new SpringSessionBackedSessionRegistry<>(sessionRepository);
     }
 
@@ -72,11 +71,12 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                         StaticResourceLocation.IMAGES.name(),
                         StaticResourceLocation.WEB_JARS.name(),
                         StaticResourceLocation.FAVICON.name(),
+                        "/auth/register",
                         "/oauth/token",
                         "/oauth/confirm_access",
                         "/oauth/authorize").permitAll().anyRequest().authenticated()
-                //禁用跨站伪造
                 .and().httpBasic(Customizer.withDefaults())
+                //禁用跨站伪造
                 .csrf().disable();
 
     }

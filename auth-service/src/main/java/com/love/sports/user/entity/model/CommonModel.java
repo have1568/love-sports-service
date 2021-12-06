@@ -1,8 +1,13 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,18 +16,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-public class CommonEntity implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class CommonModel implements Serializable {
 
     @ApiModelProperty()
     @Column(name = "create_by", length = 36)
+    @CreatedBy
     protected String createBy;
 
+    @CreatedDate
     @Column(name = "create_at")
     protected LocalDateTime createAt;
 
+    @LastModifiedBy
     @Column(name = "update_by", length = 36)
     protected String updateBy;
 
+    @LastModifiedDate
     @Column(name = "update_at")
     protected LocalDateTime updateAt;
 
@@ -41,7 +51,7 @@ public class CommonEntity implements Serializable {
     protected Status status = Status.ACTIVE;
 
 
-    enum Status {
+    public enum Status {
         INIT(0, "初始化"),
         ACTIVE(1, "正常"),
         LOCK(2, "锁定"),

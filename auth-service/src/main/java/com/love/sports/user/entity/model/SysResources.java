@@ -1,38 +1,36 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
+import org.springframework.http.HttpMethod;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Table(name = "sys_resources")
 @Entity
-@Getter
-@Setter
-@ToString
-public class SysResource extends CommonEntity {
+@Data
+public class SysResources extends CommonModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resource_id", nullable = false, length = 36)
     private int id;
 
     @Column(name = "parent_id", length = 36)
-    private String parentId;
+    private int parentId;
 
     @Column(name = "parent_ids", length = 2000)
     private String parentIds;
 
+    @NotEmpty(message = "资源名称不能为空")
     @Column(name = "res_name", length = 50)
     private String resName;
 
+    @NotEmpty(message = "资源图标不能为空")
     @Column(name = "res_icon", length = 50)
     private String resIcon;
 
@@ -42,11 +40,15 @@ public class SysResource extends CommonEntity {
     @Column(name = "res_path", length = 100)
     private String resPath;
 
-    @Column(name = "http_method", length = 50)
-    private String httpMethod;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "http_method", length = 10)
+    private HttpMethod httpMethod;
 
     @Column(name = "res_type")
-    private Character resType;
+    private ResourceType resType;
+
+    @Column(name = "root")
+    private boolean root;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "resources")
@@ -57,4 +59,9 @@ public class SysResource extends CommonEntity {
     @Column(name = "res_sort", precision = 10, scale = 2)
     private int resSort;
 
+
+    public enum ResourceType{
+        MENU,
+        API
+    }
 }

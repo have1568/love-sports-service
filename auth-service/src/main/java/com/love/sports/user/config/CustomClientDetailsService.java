@@ -1,6 +1,6 @@
 package com.love.sports.user.config;
 
-import com.love.sports.user.entity.domain.SysClientDetail;
+import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,18 +23,16 @@ import java.util.Set;
 @Service
 public class CustomClientDetailsService implements ClientDetailsService {
 
-
-
     @Resource
     private SysClientDetailService sysClientDetailService;
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
-        Assert.hasText(clientId,"客户端ID不合法");
+        Assert.hasText(clientId, "客户端ID不合法");
 
         SysClientDetail client = sysClientDetailService.getById(clientId);
-        Assert.notNull(client,"客户端权限");
+        Assert.notNull(client, "客户端不存在");
 
         BaseClientDetails details = new BaseClientDetails();
 

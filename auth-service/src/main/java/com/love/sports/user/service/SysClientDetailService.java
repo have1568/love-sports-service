@@ -1,8 +1,8 @@
 package com.love.sports.user.service;
 
 
-import com.love.sports.user.entity.domain.SysClientDetail;
-import com.love.sports.user.repo.SysClientDetailRepository;
+import com.love.sports.user.entity.model.SysClientDetail;
+import com.love.sports.user.repository.SysClientDetailRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,9 +1,8 @@
-package com.love.sports.user.entity.domain;
+package com.love.sports.user.entity.model;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "sys_dept")
 @Entity
 @ToString
-public class SysDept extends CommonEntity {
+public class SysDept extends CommonModel {
 
     @Id
     @Column(name = "dept_id", nullable = false, length = 36)
