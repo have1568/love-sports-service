@@ -1,12 +1,12 @@
 package com.love.sports.user.utils;
 
-import com.love.sports.user.LoveSportsUserApplicationTests;
+import com.love.sports.user.LoveSportsAuthApplicationTests;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
 
-public class PasswordEncoderTest extends LoveSportsUserApplicationTests {
+public class PasswordEncoderTest extends LoveSportsAuthApplicationTests {
 
     @Resource
     private PasswordEncoder passwordEncoder;

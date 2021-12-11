@@ -1,5 +1,7 @@
 package com.love.sports.user.entity.out;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.love.sports.user.entity.model.SysResources;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +14,14 @@ import java.util.*;
 @Builder
 public class LoginOutput implements Output, UserDetails {
 
+    private static final long serialVersionUID = 3420383551817753637L;
+
     private String id;
+    @JsonIgnore
+    @JSONField(serialize = false)
     private String password;
     private final String username;
+    private final String nickName;
     private final Set<GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;

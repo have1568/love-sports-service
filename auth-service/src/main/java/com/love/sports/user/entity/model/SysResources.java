@@ -2,8 +2,7 @@ package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.http.HttpMethod;
 
 import javax.persistence.*;
@@ -13,7 +12,12 @@ import java.util.Set;
 @Table(name = "sys_resources")
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysResources extends CommonModel {
+
+    private static final long serialVersionUID = 1053750930278613641L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +25,7 @@ public class SysResources extends CommonModel {
     private int id;
 
     @Column(name = "parent_id", length = 36)
-    private int parentId;
+    private Integer parentId;
 
     @Column(name = "parent_ids", length = 2000)
     private String parentIds;
@@ -30,7 +34,6 @@ public class SysResources extends CommonModel {
     @Column(name = "res_name", length = 50)
     private String resName;
 
-    @NotEmpty(message = "资源图标不能为空")
     @Column(name = "res_icon", length = 50)
     private String resIcon;
 
@@ -44,6 +47,7 @@ public class SysResources extends CommonModel {
     @Column(name = "http_method", length = 10)
     private HttpMethod httpMethod;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "res_type")
     private ResourceType resType;
 
@@ -60,7 +64,7 @@ public class SysResources extends CommonModel {
     private int resSort;
 
 
-    public enum ResourceType{
+    public enum ResourceType {
         MENU,
         API
     }

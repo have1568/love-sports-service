@@ -3,6 +3,8 @@ package com.love.sports.user.config;
 import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -19,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Log4j2
+@Slf4j
 @Service
 public class CustomClientDetailsService implements ClientDetailsService {
 
@@ -27,11 +29,12 @@ public class CustomClientDetailsService implements ClientDetailsService {
     private SysClientDetailService sysClientDetailService;
 
     @Override
+    @Cacheable(value = "oauth:client:details", key = "#clientId", unless = "#result == null")
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
         Assert.hasText(clientId, "客户端ID不合法");
 
-        SysClientDetail client = sysClientDetailService.getById(clientId);
+        SysClientDetail client = sysClientDetailService.findById(clientId);
         Assert.notNull(client, "客户端不存在");
 
         BaseClientDetails details = new BaseClientDetails();
@@ -46,7 +49,6 @@ public class CustomClientDetailsService implements ClientDetailsService {
         details.setAuthorities(authorities);
         details.setRegisteredRedirectUri(Collections.emptySet());
 
-        log.info(details);
 
         return details;
     }

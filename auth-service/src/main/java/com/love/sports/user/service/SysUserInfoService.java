@@ -1,8 +1,10 @@
 package com.love.sports.user.service;
 
 
+import com.love.sports.user.entity.model.QSysUserInfo;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.repository.SysUserInfoRepository;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -61,7 +63,7 @@ public class SysUserInfoService {
         if (!exist) {
             return false;
         }
-        sysUserInfoRepository.save(sysUserInfo);
+        save(sysUserInfo);
         return true;
     }
 
@@ -72,9 +74,13 @@ public class SysUserInfoService {
 
 
     public Page<SysUserInfo> findByCondition(SysUserInfo sysUserInfo, Pageable page) {
-        if (sysUserInfo == null) {
-            return sysUserInfoRepository.findAll(page);
-        }
+
+//        QSysUserInfo userInfo = QSysUserInfo.sysUserInfo;
+//
+//        BooleanExpression expression = userInfo.phoneNumber.eq(sysUserInfo.getPhoneNumber()).or(userInfo.username.eq(sysUserInfo.getUsername()));
+//
+//        sysUserInfoRepository.findAll(expression,page);
+
         Example<SysUserInfo> example = Example.of(sysUserInfo);
         return sysUserInfoRepository.findAll(example, page);
     }

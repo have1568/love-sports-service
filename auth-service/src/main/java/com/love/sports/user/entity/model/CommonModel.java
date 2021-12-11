@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class CommonModel implements Serializable {
 
+    private static final long serialVersionUID = -9140976117275517006L;
     @ApiModelProperty()
     @Column(name = "create_by", length = 36)
     @CreatedBy
@@ -37,11 +38,11 @@ public class CommonModel implements Serializable {
     protected LocalDateTime updateAt;
 
     @Column(name = "is_deleted")
-    protected boolean isDeleted;
+    protected boolean isDeleted = false;
 
     @Version
     @Column(name = "data_version")
-    protected Integer version;
+    protected Integer version = 0;
 
     @Column(name = "remark", length = 300)
     protected String remark;

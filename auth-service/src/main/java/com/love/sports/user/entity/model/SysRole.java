@@ -2,10 +2,7 @@ package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -14,10 +11,12 @@ import java.util.Set;
 
 @Table(name = "sys_role")
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysRole extends CommonModel {
+    private static final long serialVersionUID = 5997898799022717421L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -35,17 +34,13 @@ public class SysRole extends CommonModel {
     @ToString.Exclude
     private Set<SysUserInfo> users;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sys_roles_resources",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "resource_id", referencedColumnName = "resource_id")})
     @ApiModelProperty(value = "菜单", hidden = true)
     @ToString.Exclude
     private Set<SysResources> resources;
-
-
-    @Column(name = "data_scope")
-    private Character dataScope;
 
     @Override
     public boolean equals(Object o) {
@@ -56,7 +51,7 @@ public class SysRole extends CommonModel {
             return false;
         }
         SysRole sysRole = (SysRole) o;
-        return  Objects.equals(id, sysRole.id);
+        return Objects.equals(id, sysRole.id);
     }
 
     @Override

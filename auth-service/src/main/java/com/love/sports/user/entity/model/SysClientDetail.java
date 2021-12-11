@@ -1,7 +1,7 @@
 package com.love.sports.user.entity.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +12,14 @@ import java.time.LocalDateTime;
 
 @Table(name = "oauth_client_details")
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysClientDetail implements Serializable {
 
 
+    private static final long serialVersionUID = 7123546078053337303L;
     @Id
     @Column(name = "client_id", nullable = false, length = 256)
     private String clientId;
@@ -53,5 +56,8 @@ public class SysClientDetail implements Serializable {
 
     @Column(name = "create_time")
     private LocalDateTime createTime;
+
+    @Column(name = "is_deleted")
+    protected boolean isDeleted;
 
 }

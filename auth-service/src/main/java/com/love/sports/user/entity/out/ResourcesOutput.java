@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class ResourcesOutput implements GrantedAuthority, Output, Comparable<ResourcesOutput> {
 
+    private static final long serialVersionUID = 859425614491827538L;
     // 菜单id
     private int id;
     // 菜单名称

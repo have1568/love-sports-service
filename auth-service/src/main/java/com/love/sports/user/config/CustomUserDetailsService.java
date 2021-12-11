@@ -56,9 +56,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 if (!role.isDeleted() && role.getStatus() == CommonModel.Status.ACTIVE) {
                     //将角色对应的所有资源添加到用于构建菜单树的集合
                     resources.addAll(role.getResources());
-                    authorities.add((GrantedAuthority) role::getRoleName);
+                    authorities.add((GrantedAuthority) role::getRoleKey);
                     for (SysResources resource : role.getResources()) {
                         if (!resource.isDeleted() && resource.getStatus() == CommonModel.Status.ACTIVE) {
+                            resources.add(resource);
                             authorities.add((GrantedAuthority) resource::getResPath);
                         }
                     }
@@ -68,7 +69,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return LoginOutput.builder()
                 .id(sysUser.getId())
                 .username(sysUser.getUsername())
-                .password("********")
+                .nickName(sysUser.getNickName())
+                .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == CommonModel.Status.ACTIVE)
                 .accountNonExpired(sysUser.getStatus() == CommonModel.Status.ACTIVE)
                 .credentialsNonExpired(sysUser.getStatus() == CommonModel.Status.ACTIVE)

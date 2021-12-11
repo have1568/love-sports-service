@@ -1,8 +1,7 @@
 package com.love.sports.user.entity.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -11,13 +10,18 @@ import java.util.Objects;
 import java.util.Set;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "sys_user_info")
 public class SysUserInfo extends CommonModel {
 
+    private static final long serialVersionUID = 1281020432067260401L;
+
     @Id
-    @GeneratedValue(generator="system_uuid")
-    @GenericGenerator(name="system_uuid",strategy="uuid")
+    @GeneratedValue(generator = "system_uuid")
+    @GenericGenerator(name = "system_uuid", strategy = "uuid")
     @Column(name = "user_id", nullable = false, length = 36)
     private String id;
 
@@ -57,7 +61,7 @@ public class SysUserInfo extends CommonModel {
     private SysDept dept;
 
 
-    enum Sex {
+    public enum Sex {
         MALE,
         FEMALE,
         UNKNOWN

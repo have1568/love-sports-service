@@ -74,5 +74,15 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
         return ok(sysUserInfoService.deleteById(id));
     }
 
+
+    /**
+     * 注册用户
+     */
+    @PostMapping(path = "/register")
+    public ResponseEntity<Void> register(@RequestBody @Validated SysUserInfo sysUserInfo) {
+        sysUserInfoService.save(sysUserInfo);
+        return ok();
+    }
+
 }
 

@@ -10,12 +10,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.session.data.redis.RedisIndexedSessionRepository;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 
 import javax.annotation.Resource;
 
@@ -24,28 +21,17 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableWebSecurity
-@EnableRedisHttpSession
 public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
-
-
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
     @Resource
     private CustomUserDetailsService customUserDetailsService;
 
     @Resource
-    private RedisIndexedSessionRepository sessionRepository;
+    private SessionRegistry sessionRegistry;
 
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SpringSessionBackedSessionRegistry<>(sessionRepository);
-    }
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Override
     @Bean(name = "authenticationManager")
@@ -56,8 +42,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.maximumSessions(1).sessionRegistry(sessionRegistry()));
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
         http.formLogin().loginPage(FromLoginConstant.LOGIN_PAGE).loginProcessingUrl(FromLoginConstant.LOGIN_PROCESSING_URL).permitAll().successHandler(new LoginSuccessHandler())
@@ -71,7 +56,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                         StaticResourceLocation.IMAGES.name(),
                         StaticResourceLocation.WEB_JARS.name(),
                         StaticResourceLocation.FAVICON.name(),
-                        "/auth/register",
+                        "/api/user/register",
                         "/oauth/token",
                         "/oauth/confirm_access",
                         "/oauth/authorize").permitAll().anyRequest().authenticated()
@@ -83,7 +68,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(this.passwordEncoder);
     }
 
 
