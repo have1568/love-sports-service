@@ -19,7 +19,7 @@ public class SysDept extends CommonModel {
     private static final long serialVersionUID = 5910955527106643973L;
     @Id
     @Column(name = "dept_id", nullable = false, length = 36)
-    private int id;
+    private Integer id;
 
     @Column(name = "parent_id", length = 36)
     private String parentId;

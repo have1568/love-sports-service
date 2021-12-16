@@ -1,4 +1,4 @@
-package com.love.sports.user.config;
+package com.love.sports.user.config.impl;
 
 import com.love.sports.user.entity.model.CommonModel;
 import com.love.sports.user.entity.model.SysResources;
@@ -7,7 +7,6 @@ import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.entity.out.LoginOutput;
 import com.love.sports.user.repository.SysUserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,11 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUserInfo example = new SysUserInfo();
-        example.setUsername(username);
-        example.setDeleted(false);
-        List<SysUserInfo> userInfos = sysUserInfoRepository.findAll(Example.of(example));
 
+        List<SysUserInfo> userInfos = sysUserInfoRepository.findByUsernameAndIsDeleted(username, false);
         SysUserInfo sysUser;
 
         if (userInfos.isEmpty()) {
@@ -55,7 +51,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             for (SysRole role : sysUser.getRoles()) {
                 if (!role.isDeleted() && role.getStatus() == CommonModel.Status.ACTIVE) {
                     //将角色对应的所有资源添加到用于构建菜单树的集合
-                    resources.addAll(role.getResources());
                     authorities.add((GrantedAuthority) role::getRoleKey);
                     for (SysResources resource : role.getResources()) {
                         if (!resource.isDeleted() && resource.getStatus() == CommonModel.Status.ACTIVE) {

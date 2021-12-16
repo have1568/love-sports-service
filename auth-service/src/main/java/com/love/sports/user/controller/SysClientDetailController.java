@@ -3,6 +3,7 @@ package com.love.sports.user.controller;
 
 import java.lang.String;
 
+import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
 import com.love.sports.user.web.BaseController;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +38,7 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 获取列表(分页)
      */
     @GetMapping("/list")
-    public ResponseEntity<Page<SysClientDetail>> pageQuery(SysClientDetail sysClientDetail, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Res<Page<SysClientDetail>> pageQuery(SysClientDetail sysClientDetail, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SysClientDetail> page = sysClientDetailService.findByCondition(sysClientDetail, pageable);
         return ok(page);
     }
@@ -47,7 +47,7 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 获取
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SysClientDetail> findById(@PathVariable("id") String id) {
+    public Res<SysClientDetail> findById(@PathVariable("id") String id) {
         return ok(sysClientDetailService.findById(id));
     }
 
@@ -55,7 +55,7 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 添加
      */
     @PostMapping("/save")
-    public ResponseEntity<SysClientDetail> save(@RequestBody @Validated SysClientDetail sysClientDetail) {
+    public Res<SysClientDetail> save(@RequestBody @Validated SysClientDetail sysClientDetail) {
         return ok(sysClientDetailService.save(sysClientDetail));
     }
 
@@ -64,7 +64,7 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 修改
      */
     @PostMapping("/update/{id}")
-    public ResponseEntity<Boolean> update(@RequestBody @Validated SysClientDetail sysClientDetail, @PathVariable("id") String id) {
+    public Res<Boolean> update(@RequestBody @Validated SysClientDetail sysClientDetail, @PathVariable("id") String id) {
         return ok(sysClientDetailService.update(sysClientDetail, id));
     }
 
@@ -72,7 +72,7 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 删除
      */
     @PostMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") String id) {
+    public Res<Boolean> delete(@PathVariable("id") String id) {
         return ok(sysClientDetailService.deleteById(id));
     }
 

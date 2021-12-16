@@ -1,10 +1,8 @@
-package com.love.sports.user.config;
+package com.love.sports.user.config.impl;
 
 import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -29,7 +27,6 @@ public class CustomClientDetailsService implements ClientDetailsService {
     private SysClientDetailService sysClientDetailService;
 
     @Override
-    @Cacheable(value = "oauth:client:details", key = "#clientId", unless = "#result == null")
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
         Assert.hasText(clientId, "客户端ID不合法");

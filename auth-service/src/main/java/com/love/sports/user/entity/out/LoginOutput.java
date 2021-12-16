@@ -8,7 +8,10 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -37,7 +40,8 @@ public class LoginOutput implements Output, UserDetails {
     public static List<ResourcesOutput> buildTree(List<SysResources> resources) {
         List<ResourcesOutput> root = new ArrayList<>();
         for (SysResources node : resources) {
-            if (node.isRoot()) {
+
+            if (node.getRoot()) {
                 List<ResourcesOutput> children = getChildren(node, resources);
                 ResourcesOutput resourcesOutput = ResourcesOutput.builder()
                         .id(node.getId())
@@ -58,15 +62,15 @@ public class LoginOutput implements Output, UserDetails {
     private static List<ResourcesOutput> getChildren(SysResources node, List<SysResources> resources) {
         List<ResourcesOutput> children = new ArrayList<>();
         for (SysResources childrenNode : resources) {
-            if (!childrenNode.isRoot() && childrenNode.getParentId() == node.getId()) {
+            if (!childrenNode.getRoot() && childrenNode.getParentId() == node.getId()) {
                 ResourcesOutput resourcesOutput = ResourcesOutput.builder()
-                        .id(node.getId())
-                        .name(node.getResName())
-                        .parentId(node.getParentId())
-                        .url(node.getResPath())
-                        .icon(node.getResIcon())
-                        .order(node.getResSort())
-                        .children(getChildren(node, resources))
+                        .id(childrenNode.getId())
+                        .name(childrenNode.getResName())
+                        .parentId(childrenNode.getParentId())
+                        .url(childrenNode.getResPath())
+                        .icon(childrenNode.getResIcon())
+                        .order(childrenNode.getResSort())
+                        .children(getChildren(childrenNode, resources))
                         .build();
                 children.add(resourcesOutput);
             }

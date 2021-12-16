@@ -1,6 +1,7 @@
 package com.love.sports.user.controller;
 
 
+import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.service.SysUserInfoService;
 import com.love.sports.user.web.BaseController;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      * 获取列表(分页)
      */
     @GetMapping("/list")
-    public ResponseEntity<Page<SysUserInfo>> pageQuery(SysUserInfo sysUserInfo, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Res<Page<SysUserInfo>> pageQuery(SysUserInfo sysUserInfo, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SysUserInfo> page = sysUserInfoService.findByCondition(sysUserInfo, pageable);
         return ok(page);
     }
@@ -45,7 +45,7 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      * 获取
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SysUserInfo> findById(@PathVariable("id") String id) {
+    public Res<SysUserInfo> findById(@PathVariable("id") String id) {
         return ok(sysUserInfoService.findById(id));
     }
 
@@ -53,7 +53,7 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      * 添加
      */
     @PostMapping("/save")
-    public ResponseEntity<SysUserInfo> save(@RequestBody @Validated SysUserInfo sysUserInfo) {
+    public Res<SysUserInfo> save(@RequestBody @Validated SysUserInfo sysUserInfo) {
         return ok(sysUserInfoService.save(sysUserInfo));
     }
 
@@ -62,7 +62,7 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      * 修改
      */
     @PostMapping("/update/{id}")
-    public ResponseEntity<Boolean> update(@RequestBody @Validated SysUserInfo sysUserInfo, @PathVariable("id") String id) {
+    public Res<Boolean> update(@RequestBody @Validated SysUserInfo sysUserInfo, @PathVariable("id") String id) {
         return ok(sysUserInfoService.update(sysUserInfo, id));
     }
 
@@ -70,19 +70,12 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      * 删除
      */
     @PostMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") String id) {
+    public Res<Boolean> delete(@PathVariable("id") String id) {
         return ok(sysUserInfoService.deleteById(id));
     }
 
 
-    /**
-     * 注册用户
-     */
-    @PostMapping(path = "/register")
-    public ResponseEntity<Void> register(@RequestBody @Validated SysUserInfo sysUserInfo) {
-        sysUserInfoService.save(sysUserInfo);
-        return ok();
-    }
+
 
 }
 

@@ -20,7 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@Transactional
+@Rollback
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SysUserInfoControllerTest extends LoveSportsAuthApplicationTests {
 
@@ -63,8 +64,6 @@ class SysUserInfoControllerTest extends LoveSportsAuthApplicationTests {
     @Order(2)
     @SneakyThrows
     @Test
-    @Transactional
-    @Rollback
     void save() {
         SysUserInfo user = SysUserInfo.builder()
                 .username("TEST_SAVE")

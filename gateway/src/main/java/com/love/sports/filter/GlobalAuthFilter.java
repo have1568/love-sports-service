@@ -9,18 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.http.*;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -41,10 +35,6 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
     @Resource
     private CustomValueProperties customValueProperties;
 
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
-        return httpSecurity.csrf().disable().cors().disable().build();
-    }
 
     @Bean
     @LoadBalanced
@@ -69,7 +59,7 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
         }
 
         if (!isWhitelist.get()) {
-            String token = exchange.getRequest().getQueryParams().getFirst("token");
+            String token = getToken(exchange);
             //不是白名单，必须携带token,如果为空 返回未认证
             if (StringUtils.isEmpty(token)) {
                 return unauthorized(exchange);
@@ -83,14 +73,39 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
             ResponseEntity<CheckTokenRes> response = restTemplate().exchange(url, HttpMethod.GET, entity, CheckTokenRes.class);
 
             CheckTokenRes checkTokenRes = response.getBody();
+            LOGGER.info("checkTokenRes:{}", checkTokenRes);
 
-            if (checkTokenRes == null || !checkTokenRes.isActive()) {
+            if (checkTokenRes == null ||
+                    !checkTokenRes.isActive() ||
+                    StringUtils.hasText(checkTokenRes.getError()) ||
+                    (checkTokenRes.getCode() != null && checkTokenRes.getCode() == 500)) {
                 LOGGER.error("unauthorized : {}", checkTokenRes);
                 return unauthorized(exchange);
             }
+
+            for (String authority : checkTokenRes.getAuthorities()) {
+                if (antPathMatcher.match(authority, currentUrl)) {
+                    return chain.filter(exchange);
+                }
+            }
+            return unauthorized(exchange);
         }
-        System.out.println(exchange.getRequest().getPath());
         return chain.filter(exchange);
+    }
+
+    private String getToken(ServerWebExchange exchange) {
+        String token = exchange.getRequest().getQueryParams().getFirst("token");
+        if (!StringUtils.hasText(token)) {
+            try {
+                HttpHeaders headers = exchange.getRequest().getHeaders();
+                token = headers.getFirst("token");
+            } catch (Exception e) {
+                LOGGER.error("no token");
+            }
+
+        }
+
+        return token;
     }
 
 
@@ -98,7 +113,7 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
         serverWebExchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         DataBuffer buffer = serverWebExchange.getResponse()
                 .bufferFactory().wrap(HttpStatus.UNAUTHORIZED.getReasonPhrase().getBytes());
-        return serverWebExchange.getResponse().writeWith(Flux.just(buffer));
+        return serverWebExchange.getResponse().writeWith(Mono.just(buffer));
     }
 
     @Override

@@ -22,7 +22,7 @@ public class SysResources extends CommonModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resource_id", nullable = false, length = 36)
-    private int id;
+    private Integer id;
 
     @Column(name = "parent_id", length = 36)
     private Integer parentId;
@@ -52,7 +52,7 @@ public class SysResources extends CommonModel {
     private ResourceType resType;
 
     @Column(name = "root")
-    private boolean root;
+    private Boolean root;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "resources")
@@ -60,8 +60,8 @@ public class SysResources extends CommonModel {
     @ToString.Exclude
     private Set<SysRole> roles;
 
-    @Column(name = "res_sort", precision = 10, scale = 2)
-    private int resSort;
+    @Column(name = "res_sort")
+    private Integer resSort;
 
 
     public enum ResourceType {

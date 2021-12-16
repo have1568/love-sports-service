@@ -42,7 +42,7 @@ public class CommonModel implements Serializable {
 
     @Version
     @Column(name = "data_version")
-    protected Integer version = 0;
+    protected Integer version;
 
     @Column(name = "remark", length = 300)
     protected String remark;

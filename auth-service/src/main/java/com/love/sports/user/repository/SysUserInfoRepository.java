@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface SysUserInfoRepository extends JpaRepository<SysUserInfo, String> , QuerydslPredicateExecutor<SysUserInfo> {
 
+    List<SysUserInfo> findByUsernameAndIsDeleted(String username,boolean isDeleted);
 }

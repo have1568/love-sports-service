@@ -20,7 +20,7 @@ public class SysRole extends CommonModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "role_name", length = 200)
     private String roleName;
