@@ -99,6 +99,10 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
             try {
                 HttpHeaders headers = exchange.getRequest().getHeaders();
                 token = headers.getFirst("token");
+                if (!StringUtils.hasText(token)) {
+                    token = headers.getFirst("Authorization").split(" ")[1];
+
+                }
             } catch (Exception e) {
                 LOGGER.error("no token");
             }

@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 /**
  * @author lovew
  */
-@Configuration
+//@Configuration
 public class GatewayClientFilter implements GlobalFilter, Ordered {
 
     @Resource

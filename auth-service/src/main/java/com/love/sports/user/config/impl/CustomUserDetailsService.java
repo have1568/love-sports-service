@@ -6,7 +6,9 @@ import com.love.sports.user.entity.model.SysRole;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.entity.out.LoginOutput;
 import com.love.sports.user.repository.SysUserInfoRepository;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -73,6 +75,30 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(authorities)
                 .resources(LoginOutput.buildTree(resources)).build();
 
+    }
+
+
+    @Data
+    static class CustomGrantedAuthority implements GrantedAuthority{
+
+        private static final long serialVersionUID = -4647945953565338717L;
+
+        private String authority;
+
+        private String clientId;
+
+        public CustomGrantedAuthority() {
+        }
+
+        public CustomGrantedAuthority(String authority, String clientId) {
+            this.authority = authority;
+            this.clientId = clientId;
+        }
+
+        @Override
+        public String getAuthority() {
+            return this.authority;
+        }
     }
 
 }

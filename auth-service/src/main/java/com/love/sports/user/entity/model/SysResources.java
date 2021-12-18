@@ -63,6 +63,9 @@ public class SysResources extends CommonModel {
     @Column(name = "res_sort")
     private Integer resSort;
 
+    @Column(name = "client_id")
+    private String clientId;
+
 
     public enum ResourceType {
         MENU,

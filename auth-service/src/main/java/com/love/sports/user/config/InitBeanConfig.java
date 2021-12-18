@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
@@ -18,7 +19,13 @@ public class InitBeanConfig {
 
     @Bean
     public SessionRegistry sessionRegistry() {
+        sessionRepository.setDefaultMaxInactiveInterval(2100);
         return new SpringSessionBackedSessionRegistry<>(sessionRepository);
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 
     @Bean

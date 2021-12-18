@@ -5,8 +5,6 @@ import com.love.sports.user.common.ExceptionType;
 import com.love.sports.user.common.Res;
 import com.love.sports.user.config.constant.Whitelist;
 import com.love.sports.user.config.impl.CustomUserDetailsService;
-import org.apache.commons.lang.CharSet;
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -17,8 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import javax.annotation.Resource;
 import java.io.PrintWriter;
@@ -29,12 +28,14 @@ import java.nio.charset.StandardCharsets;
  */
 @Configuration
 @EnableWebSecurity
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)
 public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Resource
     private CustomUserDetailsService customUserDetailsService;
 
-
+    @Resource
+    private SessionRegistry sessionRegistry;
     @Resource
     private PasswordEncoder passwordEncoder;
 
@@ -49,29 +50,31 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
                 Whitelist.LOGIN_PAGE,
+                "/actuator/**",
                 "/css/**",
                 "/js/**",
                 "/images/**",
                 "/webjars/**",
-                "/**/favicon.ico"
+                "/favicon.ico"
         );
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.maximumSessions(1).sessionRegistry(sessionRegistry));
 
         //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
         http.formLogin().loginPage(Whitelist.LOGIN_PAGE).loginProcessingUrl(Whitelist.LOGIN_PROCESSING_URL).permitAll()
-                .successHandler((request, response, authentication) -> {
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-                    PrintWriter out = response.getWriter();
-                    out.write(JSON.toJSONString(Res.success(authentication.getPrincipal())));
-                    out.flush();
-                    out.close();
-                })
+                .defaultSuccessUrl("http://localhost:8081/oauth/authorize?client_id=love-sports-auth&scope=all&response_type=code&redirect_uri=http://localhost:8081/test")
+//                .successHandler((request, response, authentication) -> {
+//                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//
+//                    PrintWriter out = response.getWriter();
+//                    out.write(JSON.toJSONString(Res.success(authentication.getPrincipal())));
+//                    out.flush();
+//                    out.close();
+//                })
                 .failureHandler((request, response, exception) -> {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setCharacterEncoding(StandardCharsets.UTF_8.name());

@@ -18,6 +18,7 @@ public class Res<T> {
     public static <T> Res<T> success(){
         return Res.<T>builder().code(SUCCESS_CODE).message(SUCCESS_MESSAGE).build();
     }
+
     public static <T> Res<T> success(T data){
         return Res.<T>builder().code(SUCCESS_CODE).data(data).message(SUCCESS_MESSAGE).build();
     }

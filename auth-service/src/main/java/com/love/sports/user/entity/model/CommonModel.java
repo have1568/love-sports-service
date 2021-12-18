@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class CommonModel implements Serializable {
 
     private static final long serialVersionUID = -9140976117275517006L;
+
     @ApiModelProperty()
     @Column(name = "create_by", length = 36)
     @CreatedBy

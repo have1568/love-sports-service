@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -44,8 +45,7 @@ public class CustomClientDetailsService implements ClientDetailsService {
         details.setClientSecret(client.getClientSecret());
         details.setAuthorizedGrantTypes(Arrays.asList(client.getAuthorizedGrantTypes().split(",")));
         details.setAuthorities(authorities);
-        details.setRegisteredRedirectUri(Collections.emptySet());
-
+        details.setRegisteredRedirectUri(Arrays.stream(client.getWebServerRedirectUri().split(",")).collect(Collectors.toSet()) );
 
         return details;
     }
