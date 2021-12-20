@@ -1,6 +1,6 @@
 spring:
   application:
-    name: love-sports-user
+    name: love-sports-auth
   cloud:
     nacos:
       config:

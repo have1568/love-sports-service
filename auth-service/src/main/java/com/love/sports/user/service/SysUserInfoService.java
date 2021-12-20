@@ -1,10 +1,8 @@
 package com.love.sports.user.service;
 
 
-import com.love.sports.user.entity.model.QSysUserInfo;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.repository.SysUserInfoRepository;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

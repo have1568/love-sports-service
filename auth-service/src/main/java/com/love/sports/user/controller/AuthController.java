@@ -4,6 +4,7 @@ import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.service.SysUserInfoService;
 import com.love.sports.user.web.BaseController;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,8 @@ public class AuthController implements BaseController<Object> {
     }
 
     @GetMapping(value = "/userinfo")
-    public Principal info(Principal principal) {
-        return principal;
+    public Res<Object> info(Authentication authentication) {
+        return ok(authentication.getPrincipal());
     }
 
 }

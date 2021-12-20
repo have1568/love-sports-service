@@ -1,15 +1,17 @@
 package com.love.sports.user.config.impl;
 
+import com.love.sports.outs.GrantedAuthorityOut;
+import com.love.sports.outs.LoginOutput;
+import com.love.sports.outs.ResourcesOutput;
 import com.love.sports.user.entity.model.CommonModel;
 import com.love.sports.user.entity.model.SysResources;
 import com.love.sports.user.entity.model.SysRole;
 import com.love.sports.user.entity.model.SysUserInfo;
-import com.love.sports.user.entity.out.LoginOutput;
 import com.love.sports.user.repository.SysUserInfoRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -45,19 +47,32 @@ public class CustomUserDetailsService implements UserDetailsService {
         //构建只包含角色KEY和资源PATH 的权限集合
         Set<GrantedAuthority> authorities = new HashSet<>();
         //用于构建菜单树的集合
-        List<SysResources> resources = new ArrayList<>();
+        List<ResourcesOutput> resources = new ArrayList<>();
 
         if (sysUser.getRoles() == null || sysUser.getRoles().size() == 0) {
-            authorities.add((GrantedAuthority) () -> DEFAULT_ROLE);
+            authorities.add(new GrantedAuthorityOut(DEFAULT_ROLE));
         } else {
             for (SysRole role : sysUser.getRoles()) {
                 if (!role.isDeleted() && role.getStatus() == CommonModel.Status.ACTIVE) {
                     //将角色对应的所有资源添加到用于构建菜单树的集合
-                    authorities.add((GrantedAuthority) role::getRoleKey);
+                    authorities.add((new GrantedAuthorityOut(role.getRoleKey())));
                     for (SysResources resource : role.getResources()) {
                         if (!resource.isDeleted() && resource.getStatus() == CommonModel.Status.ACTIVE) {
-                            resources.add(resource);
-                            authorities.add((GrantedAuthority) resource::getResPath);
+                            ResourcesOutput resourcesOutput = ResourcesOutput.builder()
+                                    .id(resource.getId())
+                                    .parentId(resource.getParentId())
+                                    .parentIds(resource.getParentIds())
+                                    .resName(resource.getResName())
+                                    .resIcon(resource.getResIcon())
+                                    .resPath(resource.getResPath())
+                                    .httpMethod(resource.getHttpMethod().name())
+                                    .resType(resource.getResType().name())
+                                    .root(resource.getRoot())
+                                    .resSort(resource.getResSort())
+                                    .clientId(resource.getClientId())
+                                    .build();
+                            resources.add(resourcesOutput);
+                            authorities.add(new GrantedAuthorityOut(resource.getResPath(),resource.getClientId()));
                         }
                     }
                 }
@@ -76,29 +91,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .resources(LoginOutput.buildTree(resources)).build();
 
     }
-
-
-    @Data
-    static class CustomGrantedAuthority implements GrantedAuthority{
-
-        private static final long serialVersionUID = -4647945953565338717L;
-
-        private String authority;
-
-        private String clientId;
-
-        public CustomGrantedAuthority() {
-        }
-
-        public CustomGrantedAuthority(String authority, String clientId) {
-            this.authority = authority;
-            this.clientId = clientId;
-        }
-
-        @Override
-        public String getAuthority() {
-            return this.authority;
-        }
-    }
-
 }

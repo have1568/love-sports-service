@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.love.sports.user.common.ExceptionType;
 import com.love.sports.user.common.Res;
 import com.love.sports.user.config.constant.Whitelist;
+import com.love.sports.user.config.handler.LoginSuccessHandler;
 import com.love.sports.user.config.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import javax.annotation.Resource;
@@ -38,6 +40,8 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private SessionRegistry sessionRegistry;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    public PersistentTokenRepository tokenRepository;
 
 
     @Override
@@ -66,19 +70,10 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
         http.formLogin().loginPage(Whitelist.LOGIN_PAGE).loginProcessingUrl(Whitelist.LOGIN_PROCESSING_URL).permitAll()
                 .defaultSuccessUrl("http://localhost:8081/oauth/authorize?client_id=love-sports-auth&scope=all&response_type=code&redirect_uri=http://localhost:8081/test")
-//                .successHandler((request, response, authentication) -> {
-//                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-//
-//                    PrintWriter out = response.getWriter();
-//                    out.write(JSON.toJSONString(Res.success(authentication.getPrincipal())));
-//                    out.flush();
-//                    out.close();
-//                })
+                .successHandler(new LoginSuccessHandler())
                 .failureHandler((request, response, exception) -> {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
                     PrintWriter out = response.getWriter();
                     if (exception instanceof LockedException) {
                         out.write(JSON.toJSONString(Res.error(ExceptionType.AUTH_ERROR.getCode(), "账户被锁定!")));
@@ -116,8 +111,9 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/oauth/confirm_access",
                         "/oauth/authorize").permitAll().anyRequest().authenticated()
                 .and().httpBasic(Customizer.withDefaults())
+                .rememberMe().tokenValiditySeconds(3600).tokenRepository(tokenRepository).userDetailsService(customUserDetailsService)
                 //禁用跨站伪造
-                .csrf().disable();
+                .and().csrf().disable();
 
     }
 

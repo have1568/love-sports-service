@@ -3,7 +3,6 @@ package com.love.sports.user.config;
 import com.love.sports.user.config.impl.CustomClientDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -12,8 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.annotation.Resource;
 
@@ -32,7 +30,7 @@ public class CustomAuthorizationServerConfigurer extends AuthorizationServerConf
     private AuthenticationManager authenticationManager;
 
     @Resource
-    private RedisConnectionFactory redisConnectionFactory;
+    private TokenStore tokenStore;
 
 
     @Override
@@ -40,10 +38,9 @@ public class CustomAuthorizationServerConfigurer extends AuthorizationServerConf
 
         // 配置tokenServices参数
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(new RedisTokenStore(redisConnectionFactory));
-        /**
-         * jwt 无状态方式
-         */
+        tokenServices.setTokenStore(tokenStore);
+
+        // jwt 无状态方式
         //tokenServices.setTokenEnhancer(jwtAccessTokenConverter());
         tokenServices.setSupportRefreshToken(true);
         tokenServices.setClientDetailsService(customClientDetailsService);
@@ -54,8 +51,8 @@ public class CustomAuthorizationServerConfigurer extends AuthorizationServerConf
 
         endpoints.tokenServices(tokenServices)
                 .authenticationManager(authenticationManager);
-                // 自定义认证异常处理类
-               // .exceptionTranslator(webResponseExceptionTranslator());
+        // 自定义认证异常处理类
+        // .exceptionTranslator(webResponseExceptionTranslator());
 
     }
 
