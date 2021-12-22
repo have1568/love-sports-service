@@ -50,7 +50,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         out.flush();
         out.close();
 
-
         //getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

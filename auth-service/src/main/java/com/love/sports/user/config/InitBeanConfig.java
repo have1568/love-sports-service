@@ -7,6 +7,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -28,16 +29,14 @@ public class InitBeanConfig {
     @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
-
     @Bean
-    public TokenStore tokenStore() {
+    public RedisTokenStore redisTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
     }
 
 
     @Bean
     public SessionRegistry sessionRegistry() {
-        sessionRepository.setDefaultMaxInactiveInterval(2100);
         return new SpringSessionBackedSessionRegistry<>(sessionRepository);
     }
 
@@ -54,9 +53,7 @@ public class InitBeanConfig {
     @Bean
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        //jdbcTokenRepository.setCreateTableOnStartup(true);
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
-
 }

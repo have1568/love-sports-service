@@ -6,6 +6,7 @@ spring:
     port: 6379
     database: 1
     password: 123456
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: defaultDataSource
@@ -23,10 +24,5 @@ management:
       exposure:
         include: "*"
 logging:
-  pattern:
-    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(-){faint} %clr([%14.14t]){faint} %clr(%-40.40logger.%13.13M){cyan} %clr(%3.3L) %clr(:){faint} %msg%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
-  level:
-    root: INFO
-    org.springframework.web: INFO
-    org.springframework.security: DEBUG
-    org.springframework.boot.autoconfigure: INFO
+  file:
+    path: classpath:logback.xml

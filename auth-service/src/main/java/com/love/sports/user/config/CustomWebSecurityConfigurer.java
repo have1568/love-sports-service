@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Configuration
 @EnableWebSecurity
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Resource
