@@ -55,7 +55,7 @@ class SysRoleControllerTest extends LoveSportsAuthApplicationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + getToken());
-        MvcResult mvcResult = mockMvc.perform(get("/api/role/" + ROLE_ID)
+        MvcResult mvcResult = mockMvc.perform(get("/api/role/get/" + ROLE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(headers)
                 )

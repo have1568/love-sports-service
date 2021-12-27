@@ -73,7 +73,7 @@ public class SysRoleService {
             return sysRoleRepository.findAll(page);
         }
         Example<SysRole> example = Example.of( sysRole);
-        return sysRoleRepository.findAll(example,page);
+        return sysRoleRepository.findAll(page);
     }
 }
 

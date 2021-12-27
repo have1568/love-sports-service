@@ -52,7 +52,7 @@ class SysUserInfoControllerTest extends LoveSportsAuthApplicationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + getToken());
-        MvcResult mvcResult = mockMvc.perform(get("/api/user/" + USER_ID)
+        MvcResult mvcResult = mockMvc.perform(get("/api/user/get/" + USER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(headers)
                 )

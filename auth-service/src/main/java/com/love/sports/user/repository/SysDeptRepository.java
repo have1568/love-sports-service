@@ -6,5 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-    public interface SysDeptRepository extends JpaRepository<SysDept, Integer>, QuerydslPredicateExecutor<SysDept> {
+public interface SysDeptRepository extends JpaRepository<SysDept, Integer> {
 }

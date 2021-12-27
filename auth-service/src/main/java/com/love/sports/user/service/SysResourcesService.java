@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -76,5 +78,10 @@ public class SysResourcesService {
         Example<SysResources> example = Example.of(sysResources);
         return sysResourcesRepository.findAll(example, page);
     }
+
+    public List<Map<String, Object>> findAllForSelect() {
+        return sysResourcesRepository.findAllForSelect();
+    }
+
 }
 

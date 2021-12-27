@@ -24,6 +24,9 @@ public class SysClientDetail implements Serializable {
     @Column(name = "client_id", nullable = false, length = 256)
     private String clientId;
 
+    @Column(name = "client_name")
+    private String clientName;
+
     @Column(name = "resource_ids", length = 256)
     private String resourceIds;
 

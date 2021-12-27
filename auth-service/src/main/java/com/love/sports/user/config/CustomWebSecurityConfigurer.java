@@ -106,6 +106,8 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                         Whitelist.LOGIN_PAGE,
                         Whitelist.LOGIN_PROCESSING_URL,
                         Whitelist.REGISTER_PROCESSING_URL,
+                        "/actuator/**",
+                        "/instances/**",
                         "/oauth/token",
                         "/oauth/check_token",
                         "/oauth/confirm_access",

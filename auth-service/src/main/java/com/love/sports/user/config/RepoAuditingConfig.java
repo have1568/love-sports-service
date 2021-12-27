@@ -8,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 
 @Configuration
-public class JpaAuditingConfig implements AuditorAware<String> {
+public class RepoAuditingConfig implements AuditorAware<String> {
+
     @Override
     public Optional<String> getCurrentAuditor() {
         try {

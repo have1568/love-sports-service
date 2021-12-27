@@ -44,7 +44,7 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
     /**
      * 获取
      */
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Res<SysUserInfo> findById(@PathVariable("id") String id) {
         return ok(sysUserInfoService.findById(id));
     }
@@ -56,7 +56,6 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
     public Res<SysUserInfo> save(@RequestBody @Validated SysUserInfo sysUserInfo) {
         return ok(sysUserInfoService.save(sysUserInfo));
     }
-
 
     /**
      * 修改
@@ -73,9 +72,6 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
     public Res<Boolean> delete(@PathVariable("id") String id) {
         return ok(sysUserInfoService.deleteById(id));
     }
-
-
-
 
 }
 

@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -42,9 +44,18 @@ public class SysResourcesController implements BaseController<SysResources> {
     }
 
     /**
+     * 获取所有用于选择附件
+     * @return
+     */
+    @GetMapping("/all")
+    public Res<List<Map<String, Object>>> findAllForSelect() {
+        return Res.success(sysResourcesService.findAllForSelect());
+    }
+
+    /**
      * 获取
      */
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Res<SysResources> findById(@PathVariable("id") Integer id) {
         return ok(sysResourcesService.findById(id));
     }

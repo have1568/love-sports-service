@@ -44,7 +44,7 @@ public class SysRoleController implements BaseController<SysRole> {
     /**
      * 获取角色表
      */
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Res<SysRole> findById(@PathVariable("id") Integer id) {
         return ok(sysRoleService.findById(id));
     }

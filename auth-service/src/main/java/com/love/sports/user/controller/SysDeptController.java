@@ -30,7 +30,7 @@ public class SysDeptController implements BaseController<SysDept> {
         return ok(sysDeptService.save(sysDept));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Res<SysDept> findById(@PathVariable("id") int id) {
         SysDept sysDept = sysDeptService.findById(id);
         return ok(sysDept);

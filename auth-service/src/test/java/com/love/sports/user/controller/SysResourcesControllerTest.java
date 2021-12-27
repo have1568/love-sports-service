@@ -64,7 +64,7 @@ class SysResourcesControllerTest extends LoveSportsAuthApplicationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + getToken());
-        MvcResult mvcResult = mockMvc.perform(get("/api/resources/" + RESOURCE_ID)
+        MvcResult mvcResult = mockMvc.perform(get("/api/resources/get/" + RESOURCE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(headers)
                 )

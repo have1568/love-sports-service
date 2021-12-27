@@ -2,6 +2,8 @@ package com.love.sports.user.controller;
 
 
 import java.lang.String;
+import java.util.List;
+import java.util.Map;
 
 import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysClientDetail;
@@ -44,9 +46,18 @@ public class SysClientDetailController implements BaseController<SysClientDetail
     }
 
     /**
+     * 获取所有用于选择附件
+     * @return
+     */
+    @GetMapping("/all")
+    public Res<List<Map<String, Object>>> findAllForSelect() {
+        return Res.success(sysClientDetailService.findAllForSelect());
+    }
+
+    /**
      * 获取
      */
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Res<SysClientDetail> findById(@PathVariable("id") String id) {
         return ok(sysClientDetailService.findById(id));
     }
