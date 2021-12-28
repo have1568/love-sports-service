@@ -83,7 +83,6 @@ public class LoveSportsAuthApplicationTests {
                 .accessTokenValidity(6400)
                 .authorities("ROLE_TRUSTED_CLIENT")
                 .webServerRedirectUri("http://127.0.0.1:8080/authorized")
-                .isDeleted(false)
                 .build();
 
         sysClientDetailService.save(clientDetail);

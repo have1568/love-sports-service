@@ -32,7 +32,7 @@ public class SysDeptService {
         Optional<SysDept> optional = sysDeptRepository.findById(id);
         if (optional.isPresent()) {
             SysDept sysDept = optional.get();
-            sysDept.setDeleted(true);
+            sysDept.setDelFlag(true);
             return true;
         }
         return false;
@@ -59,7 +59,7 @@ public class SysDeptService {
             return sysDeptRepository.findAll(pageable);
         }
         Example<SysDept> example = Example.of(sysDept);
-        return sysDeptRepository.findAll(example, pageable);
+        return sysDeptRepository.findAll( pageable);
     }
 
 

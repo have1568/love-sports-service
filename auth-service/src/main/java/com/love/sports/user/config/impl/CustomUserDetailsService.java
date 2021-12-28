@@ -3,15 +3,10 @@ package com.love.sports.user.config.impl;
 import com.love.sports.outs.GrantedAuthorityOut;
 import com.love.sports.outs.LoginOutput;
 import com.love.sports.outs.ResourcesOutput;
-import com.love.sports.user.entity.model.CommonModel;
-import com.love.sports.user.entity.model.SysResources;
-import com.love.sports.user.entity.model.SysRole;
-import com.love.sports.user.entity.model.SysUserInfo;
-import com.love.sports.user.repository.SysUserInfoRepository;
-import lombok.Data;
+import com.love.sports.user.entity.model.*;
+import com.love.sports.user.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,12 +26,23 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Resource
     private SysUserInfoRepository sysUserInfoRepository;
 
+    @Resource
+    private SysRolesResourcesRepository sysRolesResourcesRepository;
+
+    @Resource
+    private SysUsersRolesRepository sysUsersRolesRepository;
+
+    @Resource
+    private SysResourcesRepository sysResourcesRepository;
+
+
+
     public static final String DEFAULT_ROLE = "ROLE_USER";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        List<SysUserInfo> userInfos = sysUserInfoRepository.findByUsernameAndIsDeleted(username, false);
+        List<SysUserInfo> userInfos = sysUserInfoRepository.findByUsernameAndDelFlag(username, false);
         SysUserInfo sysUser;
 
         if (userInfos.isEmpty()) {
@@ -46,36 +53,41 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         //构建只包含角色KEY和资源PATH 的权限集合
         Set<GrantedAuthority> authorities = new HashSet<>();
+
         //用于构建菜单树的集合
         List<ResourcesOutput> resources = new ArrayList<>();
-
-        if (sysUser.getRoles() == null || sysUser.getRoles().size() == 0) {
+        //获取到所有的用户角色对象
+        Set<SysUsersRoles> sysUserRoles = sysUser.getSysUserRoles();
+        Set<SysRole> sysRoles = sysUserRoles.stream().map(SysUsersRoles::getSysRole).collect(Collectors.toSet());
+        sysUser.setRoles(sysRoles);
+        //如果为空默认角色
+        if (sysRoles.isEmpty()) {
             authorities.add(new GrantedAuthorityOut(DEFAULT_ROLE));
         } else {
-            for (SysRole role : sysUser.getRoles()) {
-                if (!role.isDeleted() && role.getStatus() == CommonModel.Status.ACTIVE) {
-                    //将角色对应的所有资源添加到用于构建菜单树的集合
-                    authorities.add((new GrantedAuthorityOut(role.getRoleKey())));
-                    for (SysResources resource : role.getResources()) {
-                        if (!resource.isDeleted() && resource.getStatus() == CommonModel.Status.ACTIVE) {
-                            ResourcesOutput resourcesOutput = ResourcesOutput.builder()
-                                    .id(resource.getId())
-                                    .parentId(resource.getParentId())
-                                    .parentIds(resource.getParentIds())
-                                    .resName(resource.getResName())
-                                    .resIcon(resource.getResIcon())
-                                    .resPath(resource.getResPath())
-                                    .httpMethod(resource.getHttpMethod().name())
-                                    .resType(resource.getResType().name())
-                                    .root(resource.getRoot())
-                                    .resSort(resource.getResSort())
-                                    .clientId(resource.getClientId())
-                                    .build();
-                            resources.add(resourcesOutput);
-                            authorities.add(new GrantedAuthorityOut(resource.getResPath(),resource.getClientId()));
-                        }
-                    }
-                }
+
+            //获取到用户对应的资源
+            Set<SysResources> sysResources = sysResourcesRepository.findByUserId(sysUser.getId());
+            //构建Security User
+            for (SysUsersRoles role : sysUserRoles) {
+                //设置角色
+                authorities.add((new GrantedAuthorityOut(role.getSysRole().getRoleKey())));
+            }
+            for (SysResources resource : sysResources) {
+                authorities.add(new GrantedAuthorityOut(resource.getResPath(), resource.getClientId()));
+                ResourcesOutput resourcesOutput = ResourcesOutput.builder()
+                        .id(resource.getId())
+                        .parentId(resource.getParentId())
+                        .resName(resource.getResName())
+                        .resIcon(resource.getResIcon())
+                        .resPath(resource.getResPath())
+                        .httpMethod(resource.getHttpMethod().name())
+                        .resType(resource.getResType().name())
+                        .root(resource.getRoot())
+                        .resSort(resource.getResSort())
+                        .clientId(resource.getClientId())
+                        .build();
+                //设置资源
+                resources.add(resourcesOutput);
             }
         }
         return LoginOutput.builder()
@@ -83,10 +95,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .username(sysUser.getUsername())
                 .nickName(sysUser.getNickName())
                 .password(sysUser.getPassword())
-                .enabled(sysUser.getStatus() == CommonModel.Status.ACTIVE)
-                .accountNonExpired(sysUser.getStatus() == CommonModel.Status.ACTIVE)
-                .credentialsNonExpired(sysUser.getStatus() == CommonModel.Status.ACTIVE)
-                .accountNonLocked(sysUser.getStatus() != CommonModel.Status.LOCK)
+                .enabled(sysUser.getStatus() == AuditModel.Status.ACTIVE)
+                .accountNonExpired(sysUser.getStatus() == AuditModel.Status.ACTIVE)
+                .credentialsNonExpired(sysUser.getStatus() == AuditModel.Status.ACTIVE)
+                .accountNonLocked(sysUser.getStatus() != AuditModel.Status.LOCK)
                 .authorities(authorities)
                 .resources(LoginOutput.buildTree(resources)).build();
 

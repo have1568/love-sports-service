@@ -14,5 +14,6 @@ class CustomUserDetailsServiceTest extends LoveSportsAuthApplicationTests {
     @Test
     void loadUserByUsername() {
         LoginOutput userDetails = (LoginOutput) customUserDetailsService.loadUserByUsername("have1568");
+        System.out.println(userDetails);
     }
 }

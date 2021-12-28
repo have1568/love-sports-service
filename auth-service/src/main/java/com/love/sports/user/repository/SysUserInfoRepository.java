@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface SysUserInfoRepository extends JpaRepository<SysUserInfo, String> {
 
-    List<SysUserInfo> findByUsernameAndIsDeleted(String username, boolean isDeleted);
+
+    List<SysUserInfo> findByUsernameAndDelFlag(String username, boolean b);
 }

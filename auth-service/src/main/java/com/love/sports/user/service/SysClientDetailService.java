@@ -4,6 +4,7 @@ package com.love.sports.user.service;
 import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.repository.SysClientDetailRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,6 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 /**
@@ -44,13 +44,8 @@ public class SysClientDetailService {
 
     @Transactional
     public boolean deleteById(String id) {
-        Optional<SysClientDetail> optional = sysClientDetailRepository.findById(id);
-        if (optional.isPresent()) {
-            SysClientDetail entity = optional.get();
-            entity.setDeleted(true);
-            return true;
-        }
-        return false;
+        delete(id);
+        return true;
     }
 
     public void delete(String id) {
@@ -79,7 +74,7 @@ public class SysClientDetailService {
             return sysClientDetailRepository.findAll(page);
         }
         Example<SysClientDetail> example = Example.of(sysClientDetail);
-        return sysClientDetailRepository.findAll(example,page);
+        return sysClientDetailRepository.findAll(page);
     }
 
     public List<Map<String, Object>> findAllForSelect() {

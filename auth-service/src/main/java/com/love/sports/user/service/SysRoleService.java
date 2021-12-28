@@ -2,9 +2,13 @@ package com.love.sports.user.service;
 
 
 import java.lang.Integer;
+
+import com.love.sports.user.entity.model.SysResources;
 import com.love.sports.user.entity.model.SysRole;
+import com.love.sports.user.entity.model.SysRolesResources;
 import com.love.sports.user.repository.SysRoleRepository;
 
+import com.love.sports.user.repository.SysRolesResourcesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -15,6 +19,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -30,9 +35,12 @@ public class SysRoleService {
 	@Resource
     private SysRoleRepository sysRoleRepository;
 
+    @Resource
+    private SysRolesResourcesRepository sysRolesResourcesRepository;
+
     @Transactional
     public SysRole save(SysRole sysRole) {
-       return sysRoleRepository.save(sysRole);
+        return sysRoleRepository.save(sysRole);
     }
 
  
@@ -41,7 +49,7 @@ public class SysRoleService {
         Optional<SysRole> optional = sysRoleRepository.findById(id);
         if (optional.isPresent()) {
             SysRole entity= optional.get();
-            entity.setDeleted(true);
+            entity.setDelFlag(true);
             return true;
         }
         return false;

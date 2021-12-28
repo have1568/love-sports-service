@@ -44,7 +44,7 @@ public class SysResourcesService {
         Optional<SysResources> optional = sysResourcesRepository.findById(id);
         if (optional.isPresent()) {
             SysResources entity = optional.get();
-            entity.setDeleted(true);
+            entity.setDelFlag(true);
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ public class SysResourcesService {
             return sysResourcesRepository.findAll(page);
         }
         Example<SysResources> example = Example.of(sysResources);
-        return sysResourcesRepository.findAll(example, page);
+        return sysResourcesRepository.findAll(page);
     }
 
     public List<Map<String, Object>> findAllForSelect() {

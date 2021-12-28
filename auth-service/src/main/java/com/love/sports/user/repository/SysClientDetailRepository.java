@@ -18,6 +18,6 @@ import java.util.Map;
 @Repository
 public interface SysClientDetailRepository extends JpaRepository<SysClientDetail, String> {
 
-    @Query(value = "SELECT client.clientId AS value,client.clientName AS text FROM SysClientDetail client WHERE client.isDeleted = false")
+    @Query(value = "SELECT client.clientId AS value,client.clientName AS text FROM SysClientDetail client")
     List<Map<String, Object>> findAllForSelect();
 }
