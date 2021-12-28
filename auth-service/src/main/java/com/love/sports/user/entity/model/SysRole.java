@@ -9,38 +9,38 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-@Table(name = "sys_role")
-@Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class SysRole extends CommonModel {
+@AllArgsConstructor
+@Entity
+@Table(name = "sys_role")
+public class SysRole extends AuditModel {
     private static final long serialVersionUID = 5997898799022717421L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Integer id;
 
-    @Column(name = "role_name", length = 200)
     private String roleName;
 
-    @Column(name = "role_key", length = 200)
     private String roleKey;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles") //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
-    @ApiModelProperty(value = "用户", hidden = true)
-    @ToString.Exclude
-    private Set<SysUserInfo> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_roles_resources",
-            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
-            inverseJoinColumns = {@JoinColumn(name = "resource_id", referencedColumnName = "resource_id")})
-    @ApiModelProperty(value = "菜单", hidden = true)
+    //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
+    @OneToMany(mappedBy = "sysRole", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private Set<SysResources> resources;
+    @JsonIgnore
+    private Set<SysUsersRoles> usersRoles;
+
+
+
+    @OneToMany(mappedBy = "sysRole", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<SysRolesResources> rolesResources;
 
     @Override
     public boolean equals(Object o) {
@@ -51,7 +51,7 @@ public class SysRole extends CommonModel {
             return false;
         }
         SysRole sysRole = (SysRole) o;
-        return Objects.equals(id, sysRole.id);
+        return id != null && Objects.equals(id, sysRole.id);
     }
 
     @Override

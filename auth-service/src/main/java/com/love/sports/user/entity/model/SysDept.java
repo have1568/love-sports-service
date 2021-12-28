@@ -1,24 +1,25 @@
 package com.love.sports.user.entity.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
-@Table(name = "sys_dept")
-@Entity
 @ToString
-public class SysDept extends CommonModel {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "sys_dept")
+public class SysDept extends AuditModel {
 
     private static final long serialVersionUID = 5910955527106643973L;
     @Id
-    @Column(name = "dept_id", nullable = false, length = 36)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dept_id")
     private Integer id;
 
     @Column(name = "parent_id", length = 36)
@@ -39,4 +40,20 @@ public class SysDept extends CommonModel {
     @Column(name = "email", length = 50)
     private String email;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        SysDept sysDept = (SysDept) o;
+        return id != null && Objects.equals(id, sysDept.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

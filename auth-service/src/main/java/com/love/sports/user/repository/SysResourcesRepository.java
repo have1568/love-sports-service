@@ -22,7 +22,7 @@ public interface SysResourcesRepository extends JpaRepository<SysResources, Inte
     @Query(value = "SELECT res.id AS value,res.resName AS text FROM SysResources res WHERE res.delFlag = false AND res.status = 'ACTIVE'")
     List<Map<String, Object>> findAllForSelect();
 
-    @Query(nativeQuery = true ,value = "SELECT sre.*, srr.* FROM sys_resources sre LEFT JOIN sys_roles_resources srr ON sre.resource_id = srr.sys_resources_resource_id LEFT JOIN sys_users_roles sur ON srr.sys_role_role_id = sur.sys_role_role_id WHERE sur.sys_user_info_user_id = ?1 AND sre.del_flag = '0'")
+    @Query(nativeQuery = true ,value = "SELECT sre.*, srr.* FROM sys_resources sre LEFT JOIN sys_roles_resources srr ON sre.resource_id = srr.sys_resources LEFT JOIN sys_users_roles sur ON srr.sys_role = sur.sys_user_role WHERE sur.sys_user_info = ?1 AND sre.del_flag = '0'")
     Set<SysResources> findByUserId(String userId);
 
 }
