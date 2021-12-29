@@ -15,13 +15,9 @@ public class ResourcesOutput implements GrantedAuthority, Output, Comparable<Res
 
     private Integer parentId;
 
-    private String parentIds;
-
     private String resName;
 
     private String resIcon;
-
-    private String resCode;
 
     private String resPath;
 
