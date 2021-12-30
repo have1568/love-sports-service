@@ -5,6 +5,8 @@ import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -20,8 +22,8 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-@Service
-public class CustomClientDetailsService implements ClientDetailsService {
+@Configuration
+public class ClientDetailsServiceImpl implements ClientDetailsService {
 
     @Resource
     private SysClientDetailService sysClientDetailService;

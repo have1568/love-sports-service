@@ -9,11 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.security.Principal;
 
 @RestController
 @RequestMapping(path = "/auth")
-@SessionAttributes({"authorizationRequest"})
 public class AuthController implements BaseController<Object> {
 
 

@@ -1,25 +1,20 @@
 package com.love.sports.user.service;
 
 
-import java.lang.Integer;
-
-import com.love.sports.user.entity.model.SysResources;
+import com.love.sports.outs.LoginOutput;
 import com.love.sports.user.entity.model.SysRole;
-import com.love.sports.user.entity.model.SysRolesResources;
 import com.love.sports.user.repository.SysRoleRepository;
-
 import com.love.sports.user.repository.SysRolesResourcesRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Optional;
-import java.util.Set;
 
 
 /**
@@ -32,7 +27,7 @@ import java.util.Set;
 @Service
 public class SysRoleService {
 
-	@Resource
+    @Resource
     private SysRoleRepository sysRoleRepository;
 
     @Resource
@@ -43,18 +38,18 @@ public class SysRoleService {
         return sysRoleRepository.save(sysRole);
     }
 
- 
+
     @Transactional
     public boolean deleteById(Integer id) {
         Optional<SysRole> optional = sysRoleRepository.findById(id);
         if (optional.isPresent()) {
-            SysRole entity= optional.get();
+            SysRole entity = optional.get();
             entity.setDelFlag(true);
             return true;
         }
         return false;
     }
-    
+
     public void delete(Integer id) {
         sysRoleRepository.deleteById(id);
     }
@@ -74,14 +69,11 @@ public class SysRoleService {
         Assert.notNull(id, "查询Id不能为空");
         return sysRoleRepository.findById(id).orElse(null);
     }
- 
 
-    public Page<SysRole> findByCondition(SysRole sysRole,Pageable page) {
-        if (sysRole == null) {
-            return sysRoleRepository.findAll(page);
-        }
-        Example<SysRole> example = Example.of( sysRole);
-        return sysRoleRepository.findAll(page);
+
+    public Page<SysRole> findByCondition(Pageable page) {
+        Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
+        return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
     }
 }
 

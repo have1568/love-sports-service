@@ -36,8 +36,8 @@ public class SysRoleController implements BaseController<SysRole> {
      * 获取角色表列表(分页)
      */
     @GetMapping("/list")
-    public Res<Page<SysRole>> pageQuery(SysRole sysRole, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<SysRole> page = sysRoleService.findByCondition(sysRole, pageable);
+    public Res<Page<SysRole>> pageQuery(@PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<SysRole> page = sysRoleService.findByCondition(pageable);
         return ok(page);
     }
 

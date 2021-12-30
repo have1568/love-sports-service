@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 class CustomUserDetailsServiceTest extends LoveSportsAuthApplicationTests {
 
     @Resource
-    CustomUserDetailsService customUserDetailsService;
+    UserDetailsServiceImpl customUserDetailsService;
 
     @Test
     void loadUserByUsername() {

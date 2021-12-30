@@ -1,7 +1,6 @@
 package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -20,6 +19,8 @@ import java.util.Set;
 public class SysRole extends AuditModel {
     private static final long serialVersionUID = 5997898799022717421L;
 
+    public static final String DEFAULT_ROLE = "ROLE_USER";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -29,6 +30,10 @@ public class SysRole extends AuditModel {
 
     private String roleKey;
 
+    /**
+     * 角色等级用于控制 高等级的可以操作低等级的的角色（删除/创建/修改）
+     */
+    private Integer roleLevel;
 
     //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
     @OneToMany(mappedBy = "sysRole", cascade = CascadeType.ALL)

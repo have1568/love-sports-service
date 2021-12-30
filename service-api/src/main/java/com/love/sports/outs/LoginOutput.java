@@ -24,6 +24,7 @@ public class LoginOutput implements Output, UserDetails {
     private String password;
     private final String username;
     private final String nickName;
+    private final Integer roleLevel;
     private final Set<GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;

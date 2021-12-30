@@ -4,7 +4,10 @@ import com.love.sports.outs.GrantedAuthorityOut;
 import com.love.sports.outs.LoginOutput;
 import com.love.sports.outs.ResourcesOutput;
 import com.love.sports.user.entity.model.*;
-import com.love.sports.user.repository.*;
+import com.love.sports.user.repository.SysResourcesRepository;
+import com.love.sports.user.repository.SysRolesResourcesRepository;
+import com.love.sports.user.repository.SysUserInfoRepository;
+import com.love.sports.user.repository.SysUsersRolesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,15 +16,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysUserInfoRepository sysUserInfoRepository;
@@ -35,9 +35,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Resource
     private SysResourcesRepository sysResourcesRepository;
 
-
-
-    public static final String DEFAULT_ROLE = "ROLE_USER";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -62,7 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         sysUser.setRoles(sysRoles);
         //如果为空默认角色
         if (sysRoles.isEmpty()) {
-            authorities.add(new GrantedAuthorityOut(DEFAULT_ROLE));
+            authorities.add(new GrantedAuthorityOut(SysRole.DEFAULT_ROLE));
         } else {
 
             //获取到用户对应的资源
@@ -94,6 +91,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .id(sysUser.getId())
                 .username(sysUser.getUsername())
                 .nickName(sysUser.getNickName())
+                .roleLevel(getUserRoleLevel(sysRoles))
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == AuditModel.Status.ACTIVE)
                 .accountNonExpired(sysUser.getStatus() == AuditModel.Status.ACTIVE)
@@ -101,6 +99,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .accountNonLocked(sysUser.getStatus() != AuditModel.Status.LOCK)
                 .authorities(authorities)
                 .resources(LoginOutput.buildTree(resources)).build();
+
+    }
+
+    private Integer getUserRoleLevel(Set<SysRole> userRoles) {
+        return userRoles.stream().min(Comparator.comparing(SysRole::getRoleLevel)).get().getRoleLevel();
 
     }
 }

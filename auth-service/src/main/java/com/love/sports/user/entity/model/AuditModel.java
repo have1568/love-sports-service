@@ -3,8 +3,8 @@ package com.love.sports.user.entity.model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -40,13 +40,13 @@ public class AuditModel implements Serializable {
 
     @Version
     @ApiModelProperty(value = "数据版本，用于控制并发")
-    @Column(name ="data_version")
+    @Column(name = "data_version")
     protected Integer version;
 
-    @Column(name ="data_status")
+    @Column(name = "data_status")
     @ApiModelProperty(value = "数据状态")
     @Enumerated(EnumType.STRING)
-    protected Status status = Status.ACTIVE;
+    protected Status status;
 
 
     public enum Status {

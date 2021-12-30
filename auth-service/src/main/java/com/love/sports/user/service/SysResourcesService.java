@@ -8,6 +8,7 @@ import com.love.sports.user.repository.SysResourcesRepository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,11 +73,12 @@ public class SysResourcesService {
 
 
     public Page<SysResources> findByCondition(SysResources sysResources, Pageable page) {
-        if (sysResources == null) {
-            return sysResourcesRepository.findAll(page);
-        }
-        Example<SysResources> example = Example.of(sysResources);
-        return sysResourcesRepository.findAll(page);
+
+        ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("resName", contains)
+                .withMatcher("resPath", contains);
+        return sysResourcesRepository.findAll(Example.of(sysResources,matcher),page);
     }
 
     public List<Map<String, Object>> findAllForSelect() {
