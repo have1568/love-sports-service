@@ -18,7 +18,8 @@ public class SysDept extends AuditModel {
 
     private static final long serialVersionUID = 5910955527106643973L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sys_dept_gen")
+    @SequenceGenerator(name = "sys_dept_gen", sequenceName = "sys_dept_id_serial")
     @Column(name = "dept_id")
     private Integer id;
 

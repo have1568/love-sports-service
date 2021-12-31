@@ -38,10 +38,10 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             targetUrl = savedRequest.getRedirectUrl();
             log.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
         }
-        Map<String,Object> res = new HashMap<>();
-        res.put("targetUrl",targetUrl);
-        res.put("principal",authentication.getPrincipal());
-        res.put("apps",new ArrayList<>());
+        Map<String, Object> res = new HashMap<>();
+        res.put("targetUrl", targetUrl);
+        res.put("principal", authentication.getPrincipal());
+        res.put("apps", new ArrayList<>());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 

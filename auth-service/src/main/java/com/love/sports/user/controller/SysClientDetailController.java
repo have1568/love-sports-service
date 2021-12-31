@@ -1,11 +1,6 @@
 package com.love.sports.user.controller;
 
 
-import java.lang.String;
-import java.util.List;
-import java.util.Map;
-
-import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.service.SysClientDetailService;
 import com.love.sports.user.web.BaseController;
@@ -15,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 
 
 /**
@@ -40,50 +37,58 @@ public class SysClientDetailController implements BaseController<SysClientDetail
      * 获取列表(分页)
      */
     @GetMapping("/list")
-    public Res<Page<SysClientDetail>> pageQuery(SysClientDetail sysClientDetail, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<SysClientDetail> page = sysClientDetailService.findByCondition(sysClientDetail, pageable);
-        return ok(page);
+    public ResponseEntity<Page<SysClientDetail>> pageQuery(SysClientDetail sysClientDetail, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ok(sysClientDetailService.findByCondition(sysClientDetail, pageable));
     }
 
     /**
-     * 获取所有用于选择附件
+     * 获取所有
+     *
      * @return
      */
     @GetMapping("/all")
-    public Res<List<Map<String, Object>>> findAllForSelect() {
-        return Res.success(sysClientDetailService.findAllForSelect());
+    public ResponseEntity<Collection<SysClientDetail>> findAllForSelect() {
+        return ok(sysClientDetailService.findAllForSelect());
     }
 
     /**
      * 获取
+     *
+     * @return
      */
     @GetMapping("/get/{id}")
-    public Res<SysClientDetail> findById(@PathVariable("id") String id) {
+    public ResponseEntity<SysClientDetail> findById(@PathVariable("id") String id) {
         return ok(sysClientDetailService.findById(id));
     }
 
     /**
      * 添加
+     *
+     * @return
      */
     @PostMapping("/save")
-    public Res<SysClientDetail> save(@RequestBody @Validated SysClientDetail sysClientDetail) {
+    public ResponseEntity<SysClientDetail> save(@RequestBody @Validated SysClientDetail sysClientDetail) {
         return ok(sysClientDetailService.save(sysClientDetail));
     }
 
 
     /**
      * 修改
+     *
+     * @return
      */
     @PostMapping("/update/{id}")
-    public Res<Boolean> update(@RequestBody @Validated SysClientDetail sysClientDetail, @PathVariable("id") String id) {
+    public ResponseEntity<Boolean> update(@RequestBody @Validated SysClientDetail sysClientDetail, @PathVariable("id") String id) {
         return ok(sysClientDetailService.update(sysClientDetail, id));
     }
 
     /**
      * 删除
+     *
+     * @return
      */
     @PostMapping("/delete/{id}")
-    public Res<Boolean> delete(@PathVariable("id") String id) {
+    public ResponseEntity<Boolean> delete(@PathVariable("id") String id) {
         return ok(sysClientDetailService.deleteById(id));
     }
 

@@ -1,6 +1,7 @@
 package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.love.sports.utils.TreeModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpMethod;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,12 +22,13 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "sys_resources")
-public class SysResources extends AuditModel {
+public class SysResources extends AuditModel implements TreeModel {
 
     private static final long serialVersionUID = 1053750930278613641L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sys_resources_gen")
+    @SequenceGenerator(name = "sys_resources_gen", sequenceName = "sys_resources_id_serial")
     @Column(name = "resource_id")
     private Integer id;
 
@@ -52,12 +56,9 @@ public class SysResources extends AuditModel {
     @Column(name = "root")
     private Boolean root;
 
-    @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="sysResources",fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<SysRolesResources> roleResources;
-
-    @Transient
+    @ManyToMany(mappedBy = "resources")
+    @ApiModelProperty(value = "菜单角色")
     @ToString.Exclude
     private Set<SysRole> roles;
 
@@ -66,6 +67,30 @@ public class SysResources extends AuditModel {
 
     @Column(name = "client_id")
     private String clientId;
+
+    @Transient
+    private Collection<TreeModel> children = new ArrayList<>();
+
+
+    @Override
+    public <T extends TreeModel> void setChildren(Collection<T> children) {
+        this.children.addAll(children);
+    }
+
+    @Override
+    public Number getSelfId() {
+        return this.id;
+    }
+
+    @Override
+    public Number getSelfParentId() {
+        return this.parentId;
+    }
+
+    @Override
+    public boolean getSelfRoot() {
+        return this.root;
+    }
 
 
     public enum ResourceType {

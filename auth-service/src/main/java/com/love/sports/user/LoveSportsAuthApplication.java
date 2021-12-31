@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableCaching
-@CrossOrigin(origins = {"*"}, allowedHeaders = {"*"}, methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.OPTIONS}, maxAge = 1800)
+//@CrossOrigin(origins = {"*"}, allowedHeaders = {"*"}, methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.OPTIONS}, maxAge = 1800)
 public class LoveSportsAuthApplication {
 
     public static void main(String[] args) {

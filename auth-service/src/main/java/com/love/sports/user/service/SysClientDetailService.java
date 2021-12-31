@@ -2,9 +2,10 @@ package com.love.sports.user.service;
 
 
 import com.love.sports.user.entity.model.SysClientDetail;
+import com.love.sports.user.entity.model.SysResources;
 import com.love.sports.user.repository.SysClientDetailRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,6 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -54,12 +54,11 @@ public class SysClientDetailService {
 
     @Transactional
     public boolean update(SysClientDetail sysClientDetail, String id) {
-        Assert.notNull(sysClientDetail, "数据不存在");
-        boolean exist = sysClientDetailRepository.existsById(id);
-        if (!exist) {
-            return false;
-        }
-        save(sysClientDetail);
+        SysClientDetail saved = findById(id);
+        Assert.notNull(saved, "更新数据不存在");
+        Assert.notNull(sysClientDetail, "提交数据为空");
+        BeanUtils.copyProperties(sysClientDetail, saved);
+        sysClientDetailRepository.save(saved);
         return true;
     }
 
@@ -77,8 +76,8 @@ public class SysClientDetailService {
         return sysClientDetailRepository.findAll(page);
     }
 
-    public List<Map<String, Object>> findAllForSelect() {
-        return sysClientDetailRepository.findAllForSelect();
+    public List<SysClientDetail> findAllForSelect() {
+        return sysClientDetailRepository.findAll();
     }
 }
 

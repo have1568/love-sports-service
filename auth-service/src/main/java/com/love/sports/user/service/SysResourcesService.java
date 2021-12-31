@@ -1,12 +1,14 @@
 package com.love.sports.user.service;
 
 
-import java.lang.Integer;
-
 import com.love.sports.user.entity.model.SysResources;
+import com.love.sports.user.entity.model.SysRole;
+import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.repository.SysResourcesRepository;
-
+import com.love.sports.user.repository.SysUserInfoRepository;
+import com.love.sports.utils.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -16,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -34,9 +36,22 @@ public class SysResourcesService {
     @Resource
     private SysResourcesRepository sysResourcesRepository;
 
+    @Resource
+    SysUserInfoRepository sysUserInfoRepository;
+
+    @Resource
+    private SysRoleService sysRoleService;
+
     @Transactional
     public SysResources save(SysResources sysResources) {
-        return sysResourcesRepository.save(sysResources);
+        SysResources saved = sysResourcesRepository.save(sysResources);
+
+        //每次添加资源自动保存到管理员的权限列表里
+        SysRole adminRole = sysRoleService.getAdminRole();
+        adminRole.getResources().add(saved);
+        sysRoleService.save(adminRole);
+
+        return saved;
     }
 
 
@@ -57,12 +72,11 @@ public class SysResourcesService {
 
     @Transactional
     public boolean update(SysResources sysResources, Integer id) {
-        Assert.notNull(sysResources, "数据不存在");
-        boolean exist = sysResourcesRepository.existsById(id);
-        if (!exist) {
-            return false;
-        }
-        sysResourcesRepository.save(sysResources);
+        SysResources saved = findById(id);
+        Assert.notNull(saved, "更新数据不存在");
+        Assert.notNull(sysResources, "提交数据为空");
+        BeanUtils.copyProperties(sysResources, saved);
+        sysResourcesRepository.save(saved);
         return true;
     }
 
@@ -73,16 +87,26 @@ public class SysResourcesService {
 
 
     public Page<SysResources> findByCondition(SysResources sysResources, Pageable page) {
-
         ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("resName", contains)
                 .withMatcher("resPath", contains);
-        return sysResourcesRepository.findAll(Example.of(sysResources,matcher),page);
+        return sysResourcesRepository.findAll(Example.of(sysResources, matcher), page);
     }
 
-    public List<Map<String, Object>> findAllForSelect() {
-        return sysResourcesRepository.findAllForSelect();
+    public Collection<SysResources> findAllForSelect() {
+        return sysResourcesRepository.findAll();
+    }
+
+
+    public Collection<SysResources> currentUserAllowTreeResources(String userId) {
+        return TreeUtils.buildTree(findAllCurrentUserAllowResources(userId));
+    }
+
+    public Set<SysResources> findAllCurrentUserAllowResources(String userId) {
+        SysUserInfo sysUserInfo = sysUserInfoRepository.findById(userId).orElse(null);
+        Assert.notNull(sysUserInfo, "用户不存在");
+        return sysUserInfo.getRoles().stream().map(SysRole::getResources).findAny().orElse(null);
     }
 
 }

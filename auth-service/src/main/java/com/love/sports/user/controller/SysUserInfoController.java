@@ -1,7 +1,6 @@
 package com.love.sports.user.controller;
 
 
-import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.service.SysUserInfoService;
 import com.love.sports.user.web.BaseController;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,42 +34,51 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
 
     /**
      * 获取列表(分页)
+     *
+     * @return
      */
     @GetMapping("/list")
-    public Res<Page<SysUserInfo>> pageQuery(SysUserInfo sysUserInfo, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<SysUserInfo> page = sysUserInfoService.findByCondition(sysUserInfo, pageable);
-        return ok(page);
+    public ResponseEntity<Page<SysUserInfo>> pageQuery(SysUserInfo sysUserInfo, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ok(sysUserInfoService.findByCondition(sysUserInfo, pageable));
     }
 
     /**
      * 获取
+     *
+     * @return
      */
     @GetMapping("/get/{id}")
-    public Res<SysUserInfo> findById(@PathVariable("id") String id) {
+    public ResponseEntity<SysUserInfo> findById(@PathVariable("id") String id) {
         return ok(sysUserInfoService.findById(id));
     }
 
     /**
      * 添加
+     *
+     * @return
      */
     @PostMapping("/save")
-    public Res<SysUserInfo> save(@RequestBody @Validated SysUserInfo sysUserInfo) {
+    public ResponseEntity<SysUserInfo> save(@RequestBody @Validated SysUserInfo sysUserInfo) {
         return ok(sysUserInfoService.save(sysUserInfo));
     }
 
     /**
      * 修改
+     *
+     * @return
      */
     @PostMapping("/update/{id}")
-    public Res<Boolean> update(@RequestBody @Validated SysUserInfo sysUserInfo, @PathVariable("id") String id) {
+    public ResponseEntity<Boolean> update(@RequestBody @Validated SysUserInfo sysUserInfo, @PathVariable("id") String id) {
         return ok(sysUserInfoService.update(sysUserInfo, id));
     }
 
     /**
      * 删除
+     *
+     * @return
      */
     @PostMapping("/delete/{id}")
-    public Res<Boolean> delete(@PathVariable("id") String id) {
+    public ResponseEntity<Boolean> delete(@PathVariable("id") String id) {
         return ok(sysUserInfoService.deleteById(id));
     }
 

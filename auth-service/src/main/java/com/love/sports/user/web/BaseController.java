@@ -1,24 +1,30 @@
 package com.love.sports.user.web;
 
-import com.love.sports.user.common.Res;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Collection;
 
 public interface BaseController<T> {
 
-    default Res<Void> ok() {
-        return Res.success();
+    default ResponseEntity<Void> ok() {
+        return ResponseEntity.ok().build();
     }
 
-    default Res<Page<T>> ok(Page<T> page) {
-        return Res.success(page);
+    default ResponseEntity<Page<T>> ok(Page<T> page) {
+        return ResponseEntity.ok(page);
     }
 
-    default Res<Boolean> ok(Boolean bool) {
-        return Res.success(bool);
+    default ResponseEntity<Collection<T>> ok(Collection<T> collection) {
+        return ResponseEntity.ok(collection);
     }
 
-    default Res<T> ok(T t) {
-        return Res.success(t);
+    default ResponseEntity<Boolean> ok(Boolean bool) {
+        return ResponseEntity.ok(bool);
+    }
+
+    default ResponseEntity<T> ok(T t) {
+        return ResponseEntity.ok(t);
     }
 
 

@@ -1,13 +1,14 @@
 package com.love.sports.user.entity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Version;
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.persistence.Version;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -41,6 +42,7 @@ public class AuditModel implements Serializable {
     @Version
     @ApiModelProperty(value = "数据版本，用于控制并发")
     @Column(name = "data_version")
+    @JsonIgnore
     protected Integer version;
 
     @Column(name = "data_status")

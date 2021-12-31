@@ -1,12 +1,14 @@
 package com.love.sports.user.service;
 
 
+import com.love.sports.user.entity.model.SysRole;
 import com.love.sports.user.entity.model.SysUserInfo;
-import com.love.sports.user.entity.model.SysUsersRoles;
+import com.love.sports.user.repository.SysRoleRepository;
 import com.love.sports.user.repository.SysUserInfoRepository;
-import com.love.sports.user.repository.SysUsersRolesRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,8 +18,10 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -34,15 +38,16 @@ public class SysUserInfoService {
     private SysUserInfoRepository sysUserInfoRepository;
 
     @Resource
-    private PasswordEncoder passwordEncoder;
+    private SysRoleRepository sysRoleRepository;
 
     @Resource
-    private SysUsersRolesRepository sysUsersRolesRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public SysUserInfo save(SysUserInfo sysUserInfo) {
         sysUserInfo.setPassword(passwordEncoder.encode(sysUserInfo.getPassword()));
-        maintainRoleRef(sysUserInfo);
+        List<SysRole> savedRoles = getAndVerifyRoles(sysUserInfo);
+        sysUserInfo.setRoles(new HashSet<>(savedRoles));
         return sysUserInfoRepository.save(sysUserInfo);
     }
 
@@ -64,13 +69,13 @@ public class SysUserInfoService {
 
     @Transactional
     public boolean update(SysUserInfo sysUserInfo, String id) {
-        Assert.notNull(sysUserInfo, "数据不存在");
-        boolean exist = sysUserInfoRepository.existsById(id);
-        if (!exist) {
-            return false;
-        }
-        maintainRoleRef(sysUserInfo);
-        save(sysUserInfo);
+        SysUserInfo saved = findById(id);
+        Assert.notNull(saved, "更新数据不存在");
+        Assert.notNull(sysUserInfo, "提交数据为空");
+        BeanUtils.copyProperties(sysUserInfo, saved);
+        List<SysRole> savedRoles = getAndVerifyRoles(sysUserInfo);
+        saved.setRoles(new HashSet<>(savedRoles));
+        sysUserInfoRepository.save(saved);
         return true;
     }
 
@@ -81,34 +86,22 @@ public class SysUserInfoService {
 
 
     public Page<SysUserInfo> findByCondition(SysUserInfo sysUserInfo, Pageable page) {
-
-        Example<SysUserInfo> example = Example.of(sysUserInfo);
-        return sysUserInfoRepository.findAll(page);
+        ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("username", contains)
+                .withMatcher("nickName", contains);
+        return sysUserInfoRepository.findAll(Example.of(sysUserInfo, matcher), page);
     }
 
-    //维护用户角色关联表
-    @Transactional
-    public void maintainRoleRef(SysUserInfo sysUserInfo) {
-        //拿到已存储的用户角色
-        Set<SysUsersRoles> storeUsersRoles = sysUsersRolesRepository.findBySysUserInfo(sysUserInfo);
+    private List<SysRole> getAndVerifyRoles(SysUserInfo sysUserInfo) {
+        Set<Integer> ids = sysUserInfo.getRoles().stream().map(SysRole::getId).collect(Collectors.toSet());
+        List<SysRole> sysRoles = sysRoleRepository.findAllById(ids);
 
-        //暂存已保存的用户角色
-        Set<SysUsersRoles> storeUsersRolesTemp = new HashSet<>(storeUsersRoles);
-
-        Set<SysUsersRoles> inputUserRoles = sysUserInfo.getSysUserRoles();
-
-        //找出已保存的但是输入的没有的元素 删除这些元素
-        boolean hasOldEl = storeUsersRoles.removeAll(inputUserRoles);
-        if (hasOldEl) {
-            sysUsersRolesRepository.deleteAll(storeUsersRoles);
+        if (sysRoles.size() < sysUserInfo.getRoles().size()) {
+            throw new IllegalArgumentException("资源不存在");
         }
-
-        //找出输入的元素里有但是已保存的没有的元素 保存这些元素
-        boolean hasNewEl = inputUserRoles.removeAll(storeUsersRolesTemp);
-        if(hasNewEl){
-            sysUsersRolesRepository.saveAll(inputUserRoles);
-        }
-
+        return sysRoles;
     }
+
 }
 

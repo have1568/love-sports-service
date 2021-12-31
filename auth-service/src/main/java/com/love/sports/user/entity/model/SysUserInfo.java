@@ -47,14 +47,12 @@ public class SysUserInfo extends AuditModel {
     private String avatarPath;
 
     //关联设置 一对多 mappedBy:是指有谁维护关联关系 设置的是关联对象的属性名
-    @OneToMany( cascade = CascadeType.ALL, mappedBy = "sysUserInfo",fetch = FetchType.EAGER)
-    @ToString.Exclude
-    private Set<SysUsersRoles> sysUserRoles;
-
-    @ToString.Exclude
-    @Transient
+    @ManyToMany(fetch = FetchType.EAGER)
+    @ApiModelProperty(value = "用户角色")
+    @JoinTable(name = "sys_users_roles_relation",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")})
     private Set<SysRole> roles;
-
 
     @OneToOne
     @JoinColumn(name = "dept_id")

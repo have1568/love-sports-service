@@ -17,4 +17,5 @@ public interface SysRoleRepository extends JpaRepository<SysRole, Integer> {
 
     Page<SysRole> findByRoleLevelGreaterThanEqual(Integer roleLevel, Pageable pageable);
 
+    SysRole findByRoleKey(String defaultAdmin);
 }

@@ -1,7 +1,6 @@
 package com.love.sports.user.controller;
 
 
-import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysResources;
 import com.love.sports.user.service.SysResourcesService;
 import com.love.sports.user.web.BaseController;
@@ -11,12 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 
 /**
@@ -36,52 +35,74 @@ public class SysResourcesController implements BaseController<SysResources> {
 
     /**
      * 获取列表(分页)
+     *
+     * @return
      */
     @GetMapping("/list")
-    public Res<Page<SysResources>> pageQuery(SysResources sysResources, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<SysResources>> pageQuery(SysResources sysResources, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<SysResources> page = sysResourcesService.findByCondition(sysResources, pageable);
         return ok(page);
     }
 
     /**
-     * 获取所有用于选择附件
+     * 获取所有用于选择夫夫资源选择
+     *
      * @return
      */
     @GetMapping("/all")
-    public Res<List<Map<String, Object>>> findAllForSelect() {
-        return Res.success(sysResourcesService.findAllForSelect());
+    public ResponseEntity<Collection<SysResources>> findAllForSelect() {
+        return ok(sysResourcesService.findAllForSelect());
+    }
+
+
+    /**
+     * 获取所有用于选择附件
+     *
+     * @return
+     */
+    @GetMapping("/all/tree")
+    public ResponseEntity<Collection<SysResources>> currentUserAllowTreeResources(@RequestParam String userId) {
+        return ResponseEntity.ok(sysResourcesService.currentUserAllowTreeResources(userId));
     }
 
     /**
      * 获取
+     *
+     * @return
      */
     @GetMapping("/get/{id}")
-    public Res<SysResources> findById(@PathVariable("id") Integer id) {
+    public ResponseEntity<SysResources> findById(@PathVariable("id") Integer id) {
         return ok(sysResourcesService.findById(id));
     }
 
     /**
      * 添加
+     *
+     * @return
      */
     @PostMapping("/save")
-    public Res<SysResources> save(@RequestBody @Validated SysResources sysResources) {
+    public ResponseEntity<SysResources> save(@RequestBody @Validated SysResources sysResources) {
         return ok(sysResourcesService.save(sysResources));
     }
 
 
     /**
      * 修改
+     *
+     * @return
      */
     @PostMapping("/update/{id}")
-    public Res<Boolean> update(@RequestBody @Validated SysResources sysResources, @PathVariable("id") Integer id) {
+    public ResponseEntity<Boolean> update(@RequestBody @Validated SysResources sysResources, @PathVariable("id") Integer id) {
         return ok(sysResourcesService.update(sysResources, id));
     }
 
     /**
      * 删除
+     *
+     * @return
      */
     @PostMapping("/delete/{id}")
-    public Res<Boolean> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<Boolean> delete(@PathVariable("id") Integer id) {
         return ok(sysResourcesService.deleteById(id));
     }
 

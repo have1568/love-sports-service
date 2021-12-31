@@ -2,10 +2,12 @@ package com.love.sports.user.service;
 
 
 import com.love.sports.outs.LoginOutput;
+import com.love.sports.user.entity.model.SysResources;
 import com.love.sports.user.entity.model.SysRole;
+import com.love.sports.user.repository.SysResourcesRepository;
 import com.love.sports.user.repository.SysRoleRepository;
-import com.love.sports.user.repository.SysRolesResourcesRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,11 +36,14 @@ public class SysRoleService {
     @Resource
     private SysRoleRepository sysRoleRepository;
 
+
     @Resource
-    private SysRolesResourcesRepository sysRolesResourcesRepository;
+    private SysResourcesRepository sysResourcesRepository;
 
     @Transactional
     public SysRole save(SysRole sysRole) {
+        List<SysResources> sysResources = getAndVerifyResources(sysRole);
+        sysRole.setResources(new HashSet<>(sysResources));
         return sysRoleRepository.save(sysRole);
     }
 
@@ -56,12 +65,13 @@ public class SysRoleService {
 
     @Transactional
     public boolean update(SysRole sysRole, Integer id) {
-        Assert.notNull(sysRole, "数据不存在");
-        boolean exist = sysRoleRepository.existsById(id);
-        if (!exist) {
-            return false;
-        }
-        sysRoleRepository.save(sysRole);
+        SysRole saved = findById(id);
+        Assert.notNull(saved, "更新数据不存在");
+        Assert.notNull(sysRole, "提交数据为空");
+        BeanUtils.copyProperties(sysRole, saved);
+        List<SysResources> sysResources = getAndVerifyResources(sysRole);
+        saved.setResources(new HashSet<>(sysResources));
+        sysRoleRepository.save(saved);
         return true;
     }
 
@@ -70,10 +80,37 @@ public class SysRoleService {
         return sysRoleRepository.findById(id).orElse(null);
     }
 
+    public SysRole getAdminRole() {
+        SysRole admin = sysRoleRepository.findByRoleKey(SysRole.DEFAULT_ADMIN);
+        if (admin == null) {
+            SysRole sysRole = SysRole.builder()
+                    .roleName("系统管理员")
+                    .roleKey(SysRole.DEFAULT_ADMIN)
+                    .roleLevel(0)
+                    .build();
+            List<SysResources> allResources = sysResourcesRepository.findAll();
+            sysRole.setResources(new HashSet<>(allResources));
+            return sysRoleRepository.save(sysRole);
+        } else {
+            return admin;
+        }
+    }
 
     public Page<SysRole> findByCondition(Pageable page) {
         Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
         return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
     }
+
+    private List<SysResources> getAndVerifyResources(SysRole sysRole) {
+        Set<Integer> ids = sysRole.getResources().stream().map(SysResources::getId).collect(Collectors.toSet());
+        List<SysResources> sysResources = sysResourcesRepository.findAllById(ids);
+
+        if (sysResources.size() < sysRole.getResources().size()) {
+            throw new IllegalArgumentException("资源不存在");
+        }
+        return sysResources;
+    }
+
+
 }
 

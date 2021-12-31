@@ -2,14 +2,12 @@ package com.love.sports.user.service;
 
 import com.alibaba.fastjson.JSON;
 import com.love.sports.user.LoveSportsAuthApplicationTests;
+import com.love.sports.user.entity.model.SysResources;
+import com.love.sports.utils.TreeUtils;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
-
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Collection;
 
 class SysResourcesServiceTest extends LoveSportsAuthApplicationTests {
 
@@ -18,8 +16,15 @@ class SysResourcesServiceTest extends LoveSportsAuthApplicationTests {
 
     @Test
     void findAllForSelect() {
-        List<Map<String, Object>> allForSelect = sysResourcesService.findAllForSelect();
+        Collection<SysResources> allForSelect = sysResourcesService.findAllForSelect();
 
         System.out.println(JSON.toJSONString(allForSelect));
+    }
+
+    @Test
+    void findAllCurrentUserAllowResourcesTest() {
+        Collection<SysResources> resources = sysResourcesService.currentUserAllowTreeResources("1");
+        Collection<SysResources> tree = TreeUtils.buildTree(resources);
+        System.out.println(tree);
     }
 }

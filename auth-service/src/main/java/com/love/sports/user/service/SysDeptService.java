@@ -1,8 +1,10 @@
 package com.love.sports.user.service;
 
+import com.love.sports.user.entity.model.SysClientDetail;
 import com.love.sports.user.entity.model.SysDept;
 import com.love.sports.user.repository.SysDeptRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,12 +42,11 @@ public class SysDeptService {
 
     @Transactional
     public boolean update(SysDept sysDept, int id) {
-        Assert.notNull(sysDept, "数据不存在");
-        boolean exist = sysDeptRepository.existsById(id);
-        if (!exist) {
-            return false;
-        }
-        sysDeptRepository.save(sysDept);
+        SysDept saved = findById(id);
+        Assert.notNull(saved, "更新数据不存在");
+        Assert.notNull(sysDept, "提交数据为空");
+        BeanUtils.copyProperties(sysDept, saved);
+        sysDeptRepository.save(saved);
         return true;
     }
 

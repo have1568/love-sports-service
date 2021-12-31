@@ -1,6 +1,7 @@
 package com.love.sports.user.entity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -20,9 +21,11 @@ public class SysRole extends AuditModel {
     private static final long serialVersionUID = 5997898799022717421L;
 
     public static final String DEFAULT_ROLE = "ROLE_USER";
+    public static final String DEFAULT_ADMIN = "ROLE_ADMIN";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sys_role_gen")
+    @SequenceGenerator(name = "sys_role_gen", sequenceName = "sys_role_id_serial")
     @Column(name = "role_id")
     private Integer id;
 
@@ -35,17 +38,20 @@ public class SysRole extends AuditModel {
      */
     private Integer roleLevel;
 
-    //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
-    @OneToMany(mappedBy = "sysRole", cascade = CascadeType.ALL)
-    @ToString.Exclude
+
     @JsonIgnore
-    private Set<SysUsersRoles> usersRoles;
-
-
-
-    @OneToMany(mappedBy = "sysRole", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles") //mappedBy 的值对应 SysUserInfo 类 的roles 属性名称
+    @ApiModelProperty(value = "用户",hidden = true)
     @ToString.Exclude
-    private Set<SysRolesResources> rolesResources;
+    private Set<SysUserInfo> users;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_roles_resources_relation",
+            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "resource_id", referencedColumnName = "resource_id")})
+    @ApiModelProperty(value = "菜单",hidden = true)
+    private Set<SysResources> resources;
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,7 +1,6 @@
 package com.love.sports.user.controller;
 
 
-import com.love.sports.user.common.Res;
 import com.love.sports.user.entity.model.SysRole;
 import com.love.sports.user.service.SysRoleService;
 import com.love.sports.user.web.BaseController;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,43 +34,47 @@ public class SysRoleController implements BaseController<SysRole> {
 
     /**
      * 获取角色表列表(分页)
+     * @return
      */
     @GetMapping("/list")
-    public Res<Page<SysRole>> pageQuery(@PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<SysRole> page = sysRoleService.findByCondition(pageable);
-        return ok(page);
+    public ResponseEntity<Page<SysRole>> pageQuery(@PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ok(sysRoleService.findByCondition(pageable));
     }
 
     /**
      * 获取角色表
+     * @return
      */
     @GetMapping("/get/{id}")
-    public Res<SysRole> findById(@PathVariable("id") Integer id) {
+    public ResponseEntity<SysRole> findById(@PathVariable("id") Integer id) {
         return ok(sysRoleService.findById(id));
     }
 
     /**
      * 添加角色表
+     * @return
      */
     @PostMapping("/save")
-    public Res<SysRole> save(@RequestBody @Validated SysRole sysRole) {
+    public ResponseEntity<SysRole> save(@RequestBody @Validated SysRole sysRole) {
         return ok(sysRoleService.save(sysRole));
     }
 
 
     /**
      * 修改角色表
+     * @return
      */
     @PostMapping("/update/{id}")
-    public Res<Boolean> update(@RequestBody @Validated SysRole sysRole, @PathVariable("id") Integer id) {
+    public ResponseEntity<Boolean> update(@RequestBody @Validated SysRole sysRole, @PathVariable("id") Integer id) {
         return ok(sysRoleService.update(sysRole, id));
     }
 
     /**
      * 删除角色表
+     * @return
      */
     @PostMapping("/delete/{id}")
-    public Res<Boolean> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<Boolean> delete(@PathVariable("id") Integer id) {
         return ok(sysRoleService.deleteById(id));
     }
 
