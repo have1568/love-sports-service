@@ -39,7 +39,8 @@ public class SysUserInfoController implements BaseController<SysUserInfo> {
      */
     @GetMapping("/list")
     public ResponseEntity<Page<SysUserInfo>> pageQuery(SysUserInfo sysUserInfo, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ok(sysUserInfoService.findByCondition(sysUserInfo, pageable));
+        Page<SysUserInfo> page = sysUserInfoService.findByCondition(sysUserInfo, pageable);
+        return ok(page);
     }
 
     /**

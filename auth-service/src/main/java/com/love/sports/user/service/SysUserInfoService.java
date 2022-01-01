@@ -1,16 +1,16 @@
 package com.love.sports.user.service;
 
 
+import com.love.sports.user.entity.model.QSysUserInfo;
 import com.love.sports.user.entity.model.SysRole;
 import com.love.sports.user.entity.model.SysUserInfo;
 import com.love.sports.user.repository.SysRoleRepository;
 import com.love.sports.user.repository.SysUserInfoRepository;
+import com.love.sports.utils.ObjectUtils;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +42,9 @@ public class SysUserInfoService {
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private JPAQueryFactory jpaQuery;
 
     @Transactional
     public SysUserInfo save(SysUserInfo sysUserInfo) {
@@ -86,11 +89,24 @@ public class SysUserInfoService {
 
 
     public Page<SysUserInfo> findByCondition(SysUserInfo sysUserInfo, Pageable page) {
-        ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("username", contains)
-                .withMatcher("nickName", contains);
-        return sysUserInfoRepository.findAll(Example.of(sysUserInfo, matcher), page);
+        if (ObjectUtils.isAllFieldNull(sysUserInfo)) {
+            return findByJpaQuery(page);
+        } else {
+            ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("username", contains)
+                    .withMatcher("nickName", contains);
+            return sysUserInfoRepository.findAll(Example.of(sysUserInfo, matcher), page);
+        }
+
+
+    }
+
+    public Page<SysUserInfo> findByJpaQuery(Pageable page) {
+        QSysUserInfo qSysUserInfo = QSysUserInfo.sysUserInfo;
+        List<SysUserInfo> fetch = jpaQuery.selectFrom(qSysUserInfo).offset(page.getOffset()).limit(page.getPageSize()).orderBy(qSysUserInfo.createAt.desc()).fetch();
+        long total = sysUserInfoRepository.countTotal();
+        return new PageImpl<>(fetch, page, total);
     }
 
     private List<SysRole> getAndVerifyRoles(SysUserInfo sysUserInfo) {
