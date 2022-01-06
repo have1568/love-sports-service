@@ -136,7 +136,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.love.sports.user.LoveSportsUserApplication</mainClass>
+                    <mainClass>com.love.sports.auth.LoveSportsUserApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

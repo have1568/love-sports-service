@@ -22,7 +22,7 @@ public class InitBeanConfig {
     }
 
     @Bean
-    public DefaultTokenServices defaultTokenServices(){
+    public DefaultTokenServices defaultTokenServices() {
         // 配置tokenServices参数
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenStore(tokenStore());
