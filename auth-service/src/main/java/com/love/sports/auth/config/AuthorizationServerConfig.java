@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -52,7 +53,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     public ApprovalStore approvalStore() {
-        return new JdbcApprovalStore(dataSource);
+        TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
+        tokenApprovalStore.setTokenStore(redisTokenStore);
+        return tokenApprovalStore;
     }
 
 
@@ -60,7 +63,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .tokenServices(defaultTokenServices())
-                //.approvalStore(approvalStore())
+                .approvalStore(approvalStore())
                 .exceptionTranslator(new WebResponseExceptionTranslatorImpl())
                 .authenticationManager(authenticationManager);
 

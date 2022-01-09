@@ -83,7 +83,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .accountNonLocked(sysUser.getStatus() != AuditModel.Status.LOCK)
                 .authorities(authorities)
                 .resources(TreeUtils.buildTree(resources)).build();
-
     }
 
     private Integer getUserRoleLevel(Set<SysRole> userRoles) {

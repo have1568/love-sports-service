@@ -49,7 +49,6 @@ class SysUserInfoControllerTest extends LoveSportsAuthApplicationTests {
     @Order(1)
     @SneakyThrows
     @Test
-    @Commit
     void findById() {
 
         HttpHeaders headers = new HttpHeaders();

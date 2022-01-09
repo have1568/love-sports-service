@@ -96,6 +96,22 @@ public class SysRoleService {
         }
     }
 
+    public SysRole getDefaultRole() {
+        SysRole defaultRole = sysRoleRepository.findByRoleKey(SysRole.DEFAULT_ROLE);
+        if (defaultRole == null) {
+            SysRole sysRole = SysRole.builder()
+                    .roleName("普通用户")
+                    .roleKey(SysRole.DEFAULT_ROLE)
+                    .roleLevel(2)
+                    .build();
+            List<SysResources> allResources = sysResourcesRepository.findAll();
+            sysRole.setResources(new HashSet<>(allResources));
+            return sysRoleRepository.save(sysRole);
+        } else {
+            return defaultRole;
+        }
+    }
+
     public Page<SysRole> findByCondition(Pageable page) {
         Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
         return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);

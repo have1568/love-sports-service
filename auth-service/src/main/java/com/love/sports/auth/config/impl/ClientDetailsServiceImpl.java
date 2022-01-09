@@ -24,7 +24,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Resource
     private SysClientDetailService sysClientDetailService;
 
-    @Cacheable(cacheNames = "client", key = "#clientId")
+    @Cacheable(cacheNames = "clients", key = "#clientId",cacheManager = "sysCacheManager")
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
@@ -35,20 +35,16 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 
         BaseClientDetails details = new BaseClientDetails();
 
-        //模拟拥有所有的权限
-
         details.setClientId(client.getClientId());
         details.setClientSecret(client.getClientSecret());
         details.setScope(Arrays.asList(client.getScope().split(",")));
         details.setResourceIds(Arrays.asList(client.getResourceIds().split(",")));
         details.setAuthorizedGrantTypes(Arrays.asList(client.getAuthorizedGrantTypes().split(",")));
         details.setRegisteredRedirectUri(Arrays.stream(client.getWebServerRedirectUri().split(",")).collect(Collectors.toSet()));
-        //todo
-        details.setAutoApproveScopes(Arrays.asList("true"));
+        details.setAutoApproveScopes(Arrays.stream(client.getAutoApprove().split(",")).collect(Collectors.toSet()));
         details.setAuthorities(AuthorityUtils.createAuthorityList(client.getAuthorities().split(",")));
         details.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
         details.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
-        //todo
         details.setAdditionalInformation(client.getAdditionalInformation());
         return details;
     }

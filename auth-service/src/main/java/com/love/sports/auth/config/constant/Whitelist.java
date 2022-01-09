@@ -2,7 +2,7 @@ package com.love.sports.auth.config.constant;
 
 public class Whitelist {
 
-    public static final String LOGIN_PAGE = "/login.html";
+    public static final String LOGIN_PAGE = "/#/login";
 
     public static final String REGISTER_PROCESSING_URL = "/auth/register";
 
@@ -23,12 +23,16 @@ public class Whitelist {
     public static final String JS = "/js/**";
     public static final String IMAGES = "/images/**";
     public static final String IMG = "/img/**";
+    public static final String FONTS = "/fonts/**";
     public static final String WEBJARS = "/webjars/**";
     public static final String FAVICON = "/**/favicon.ico";
+
+    public static final String VIEWS = "/#/**";
+    public static final String STATIC = "/static/**";
 
 
     public static final String[] WHITE_LIST = {LOGIN_PAGE, REGISTER_PROCESSING_URL, LOGIN_PROCESSING_URL, ACTUATOR, INSTANCES, OAUTH};
 
-    public static final String[] IGNORE_LIST = {LOGIN_PAGE, CSS, JS, IMAGES, IMG, WEBJARS, FAVICON};
+    public static final String[] IGNORE_LIST = {LOGIN_PAGE, CSS, JS, IMAGES, IMG, WEBJARS, FAVICON, VIEWS, FONTS, STATIC,"/"};
 
 }

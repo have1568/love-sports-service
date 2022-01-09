@@ -7,8 +7,8 @@ public enum ExceptionType {
     AUTHORITY_ERROR(403,"权限错误");
 
 
-    private int code;
-    private String message;
+    private final int code;
+    private final String message;
 
     ExceptionType(int i, String msg) {
         this.code = i;

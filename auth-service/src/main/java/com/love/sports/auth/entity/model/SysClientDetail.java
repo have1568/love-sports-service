@@ -1,6 +1,7 @@
 package com.love.sports.auth.entity.model;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -29,6 +30,7 @@ public class SysClientDetail implements Serializable {
 
     private String resourceIds;
 
+    @JsonIgnore
     private String clientSecret;
 
     private String scope;

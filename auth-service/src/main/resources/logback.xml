@@ -20,6 +20,7 @@
     </appender>
     <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="og4j.logger.org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
+    <logger name="org.postgresql.core" level="debug"/>
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
