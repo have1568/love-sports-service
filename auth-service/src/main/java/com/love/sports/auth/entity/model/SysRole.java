@@ -44,7 +44,7 @@ public class SysRole extends AuditModel {
     @ToString.Exclude
     private Set<SysUserInfo> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "sys_roles_resources_relation",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "resource_id", referencedColumnName = "resource_id")})

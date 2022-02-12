@@ -33,7 +33,7 @@ public class AuthController implements BaseController<Object> {
      */
     @GetMapping(value = "/userinfo")
     public ResponseEntity<Object> info(Authentication authentication) {
-        return ok(authentication.getPrincipal());
+        return ok(authService.getUserInfo(authentication));
     }
 
     /**

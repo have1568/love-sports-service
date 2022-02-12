@@ -1,11 +1,15 @@
 package com.love.sports.auth.service;
 
 
+import com.love.sports.auth.config.impl.UserDetailsServiceImpl;
 import com.love.sports.auth.entity.model.AuditModel;
 import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.entity.model.SysUserInfo;
 import com.love.sports.auth.event.*;
 import com.love.sports.auth.repository.SysUserInfoRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +39,9 @@ public class AuthService {
 
     @Resource
     private ResetPasswordEventStore resetPasswordEventStore;
+
+    @Resource
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Transactional
     public SysUserInfo register(SysUserInfo sysUserInfo) {
@@ -166,5 +173,10 @@ public class AuthService {
             code.append(r);  //把每次随机出的数字拼在一起
         }
         return code.toString();
+    }
+
+    public Object getUserInfo(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetailsServiceImpl.loadUserByUsername(userDetails.getUsername());
     }
 }

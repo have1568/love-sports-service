@@ -94,7 +94,6 @@ public class SysUserInfoService {
         } else {
             ExampleMatcher.GenericPropertyMatcher contains = ExampleMatcher.GenericPropertyMatchers.contains();
             ExampleMatcher matcher = ExampleMatcher.matching()
-                    .withMatcher("username", contains)
                     .withMatcher("nickName", contains);
             return sysUserInfoRepository.findAll(Example.of(sysUserInfo, matcher), page);
         }

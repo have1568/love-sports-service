@@ -113,8 +113,10 @@ public class SysRoleService {
     }
 
     public Page<SysRole> findByCondition(Pageable page) {
-        Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
-        return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
+//        Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
+//        return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
+
+        return sysRoleRepository.findAll(page);
     }
 
     private List<SysResources> getAndVerifyResources(SysRole sysRole) {

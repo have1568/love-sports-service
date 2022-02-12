@@ -82,7 +82,7 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
 
     private void checkCurrentUrlIsMatch(OAuth2Authentication auth) {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
+        Assert.notNull(requestAttributes,"request not be null");
         HttpServletRequest request = requestAttributes.getRequest();
         String currentUrl = request.getRequestURI();
         Collection<GrantedAuthority> authorities = auth.getAuthorities();

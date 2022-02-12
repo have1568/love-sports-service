@@ -12,10 +12,12 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "sys_user_info")
+@NamedEntityGraph(name = "SysUserInfo.roles", attributeNodes = @NamedAttributeNode(value = "roles"))
 public class SysUserInfo extends AuditModel {
 
     private static final long serialVersionUID = 1281020432067260401L;
@@ -53,17 +55,13 @@ public class SysUserInfo extends AuditModel {
     private String avatarPath;
 
     //关联设置 一对多 mappedBy:是指有谁维护关联关系 设置的是关联对象的属性名
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @ApiModelProperty(value = "用户角色")
     @JoinTable(name = "sys_users_roles_relation",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")})
+    @ToString.Exclude
     private Set<SysRole> roles;
-
-    @OneToOne
-    @JoinColumn(name = "dept_id")
-    @ApiModelProperty(value = "用户部门")
-    private SysDept dept;//部门字段需要指定外键指向部门表
 
 
     public enum Sex {

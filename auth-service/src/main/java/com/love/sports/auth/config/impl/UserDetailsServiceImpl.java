@@ -1,9 +1,12 @@
 package com.love.sports.auth.config.impl;
 
 import com.love.sports.auth.entity.model.AuditModel;
+import com.love.sports.auth.entity.model.SysResources;
 import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.entity.model.SysUserInfo;
+import com.love.sports.auth.repository.SysResourcesRepository;
 import com.love.sports.auth.repository.SysUserInfoRepository;
+import com.love.sports.auth.service.SysRoleService;
 import com.love.sports.outs.GrantedAuthorityOut;
 import com.love.sports.outs.LoginOutput;
 import com.love.sports.outs.ResourcesOutput;
@@ -14,7 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 
@@ -24,6 +29,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysUserInfoRepository sysUserInfoRepository;
+    @Resource
+    SysResourcesRepository sysResourcesRepository;
+
+    @Resource
+    private SysRoleService sysRoleService;
+
+    @PostConstruct
+    @Transactional
+    public void initAdminResources(){
+        SysRole adminRole = sysRoleService.getAdminRole();
+        List<SysResources> allResources = sysResourcesRepository.findAll();
+
+        adminRole.setResources(new HashSet<>(allResources));
+        sysRoleService.save(adminRole);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

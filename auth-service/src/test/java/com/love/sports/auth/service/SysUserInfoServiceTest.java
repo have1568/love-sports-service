@@ -1,11 +1,11 @@
 package com.love.sports.auth.service;
 
 import com.love.sports.auth.LoveSportsAuthApplicationTests;
+import com.love.sports.auth.entity.model.SysUserInfo;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SysUserInfoServiceTest extends LoveSportsAuthApplicationTests {
 
@@ -35,6 +35,7 @@ class SysUserInfoServiceTest extends LoveSportsAuthApplicationTests {
 
     @Test
     void findByCondition() {
+        sysUserInfoService.findByCondition(new SysUserInfo(), PageRequest.of(0, 10));
     }
 
     @Test
