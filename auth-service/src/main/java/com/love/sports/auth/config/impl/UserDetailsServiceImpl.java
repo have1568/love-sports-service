@@ -9,8 +9,6 @@ import com.love.sports.auth.repository.SysUserInfoRepository;
 import com.love.sports.auth.service.SysRoleService;
 import com.love.sports.outs.GrantedAuthorityOut;
 import com.love.sports.outs.LoginOutput;
-import com.love.sports.outs.ResourcesOutput;
-import com.love.sports.utils.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @PostConstruct
     @Transactional
-    public void initAdminResources(){
+    public void initAdminResources() {
         SysRole adminRole = sysRoleService.getAdminRole();
         List<SysResources> allResources = sysResourcesRepository.findAll();
 
@@ -60,8 +61,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         //构建只包含角色KEY和资源PATH 的权限集合
         Set<GrantedAuthority> authorities = new HashSet<>();
-        //用于构建菜单树的集合
-        List<ResourcesOutput> resources = new ArrayList<>();
+
 
         //如果为空默认角色
         if (sysUser.getRoles().isEmpty()) {
@@ -74,20 +74,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         authorities.add((new GrantedAuthorityOut(role.getRoleKey())));
                         role.getResources().forEach(resource -> {
                             authorities.add(new GrantedAuthorityOut(resource.getResPath(), resource.getClientId()));
-                            ResourcesOutput resourcesOutput = ResourcesOutput.builder()
-                                    .id(resource.getId())
-                                    .parentId(resource.getParentId())
-                                    .resName(resource.getResName())
-                                    .resIcon(resource.getResIcon())
-                                    .resPath(resource.getResPath())
-                                    .httpMethod(resource.getHttpMethod().name())
-                                    .resType(resource.getResType().name())
-                                    .root(resource.getRoot())
-                                    .resSort(resource.getResSort())
-                                    .clientId(resource.getClientId())
-                                    .build();
-                            //设置资源
-                            resources.add(resourcesOutput);
                         });
                     });
 
@@ -103,9 +89,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .credentialsNonExpired(sysUser.getStatus() == AuditModel.Status.ACTIVE)
                 .accountNonLocked(sysUser.getStatus() != AuditModel.Status.LOCK)
                 .authorities(authorities)
-                .resources(TreeUtils.buildTree(resources)).build();
+                .build();
     }
 
+    /**
+     * 获取用户的最高角色等级
+     *
+     * @param userRoles 用户的多个角色
+     * @return 返回用户的最高角色等级（数字越小，角色等级越高）
+     */
     private Integer getUserRoleLevel(Set<SysRole> userRoles) {
         return userRoles.stream().min(Comparator.comparing(SysRole::getRoleLevel)).get().getRoleLevel();
 

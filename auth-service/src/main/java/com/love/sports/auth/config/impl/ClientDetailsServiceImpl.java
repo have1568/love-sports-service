@@ -1,5 +1,6 @@
 package com.love.sports.auth.config.impl;
 
+import com.love.sports.auth.config.constant.RedisCacheNameConstant;
 import com.love.sports.auth.entity.model.SysClientDetail;
 import com.love.sports.auth.service.SysClientDetailService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Resource
     private SysClientDetailService sysClientDetailService;
 
-    @Cacheable(cacheNames = "clients", key = "#clientId",cacheManager = "sysCacheManager")
+    @Cacheable(cacheNames = RedisCacheNameConstant.CLIENTS, key = "#clientId",cacheManager = "sysCacheManager")
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 

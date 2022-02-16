@@ -1,0 +1,45 @@
+server:
+  port: 8083
+spring:
+  redis:
+    host: 192.168.1.111
+    port: 6379
+    database: 1
+    password: 123456
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    name: defaultDataSource
+    password: 123456
+    url: jdbc:postgresql://192.168.1.116:5432/love-sports-file
+    username: postgres
+  jpa:
+    show-sql: true
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 215MB
+      file-size-threshold: 2KB
+  data:
+    mongodb:
+      grid-fs-database: love-sports-file # TODO 不能读取到 gridFsTemplate bucket is null
+      uri: mongodb://root:123456@192.168.1.111:27017/love-sports-file?authSource=admin&authMechanism=SCRAM-SHA-1
+logging:
+  file:
+    path: classpath:logback-spring.xml
+file:
+  store: minio
+  uploadDir: "E://mnt/file"
+  base-url: "http://localhost:${server.port}/downloadFile/"
+minio:
+  username: have1568
+  password: had15680604
+  endpoint: http://192.168.1.111
+  port: 9000
+  bucket: love-sports-file

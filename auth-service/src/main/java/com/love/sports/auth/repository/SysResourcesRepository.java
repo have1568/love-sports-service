@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,10 +17,13 @@ import java.util.Set;
 @Repository
 public interface SysResourcesRepository extends JpaRepository<SysResources, Integer> {
 
-    @Query(value = "SELECT res.id AS value,res.resName AS text FROM SysResources res WHERE res.delFlag = false AND res.status = 'ACTIVE'")
-    List<Map<String, Object>> findAllForSelect();
-
-    @Query(nativeQuery = true ,value = "SELECT sre.*, srr.* FROM sys_resources sre LEFT JOIN sys_roles_resources srr ON sre.resource_id = srr.sys_resources LEFT JOIN sys_users_roles sur ON srr.sys_role = sur.sys_user_role WHERE sur.sys_user_info = ?1 AND sre.del_flag = '0'")
-    Set<SysResources> findByUserId(String userId);
+    /**
+     * 获取用户的菜单列表
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    @Query(nativeQuery = true, value = "SELECT sre.*, srr.* FROM sys_resources sre LEFT JOIN sys_roles_resources_relation srr ON sre.resource_id = srr.resource_id JOIN sys_users_roles_relation sur ON srr.role_id = sur.role_id WHERE sur.user_id = ?1 AND sre.del_flag = '0' AND sre.res_type = 'MENU' AND sre.data_status = 'ACTIVE'")
+    Set<SysResources> findUserMenus(String userId);
 
 }

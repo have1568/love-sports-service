@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "sys_role")
+@NamedEntityGraph(name = "SysRole.resources", attributeNodes = @NamedAttributeNode(value = "resources"))
 public class SysRole extends AuditModel {
     private static final long serialVersionUID = 5997898799022717421L;
 

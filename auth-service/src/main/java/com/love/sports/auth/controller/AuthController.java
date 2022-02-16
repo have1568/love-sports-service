@@ -7,7 +7,6 @@ import com.love.sports.auth.event.ResetPasswordEvent;
 import com.love.sports.auth.service.AuthService;
 import com.love.sports.auth.web.BaseController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +31,8 @@ public class AuthController implements BaseController<Object> {
      * 获取用户信息
      */
     @GetMapping(value = "/userinfo")
-    public ResponseEntity<Object> info(Authentication authentication) {
-        return ok(authService.getUserInfo(authentication));
+    public ResponseEntity<Object> info() {
+        return ok(authService.getUserInfo());
     }
 
     /**

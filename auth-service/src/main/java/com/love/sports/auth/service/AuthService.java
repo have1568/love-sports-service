@@ -7,7 +7,8 @@ import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.entity.model.SysUserInfo;
 import com.love.sports.auth.event.*;
 import com.love.sports.auth.repository.SysUserInfoRepository;
-import org.springframework.security.core.Authentication;
+import com.love.sports.outs.LoginOutput;
+import com.love.sports.outs.ResourcesOutput;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +43,9 @@ public class AuthService {
 
     @Resource
     private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @Resource
+    private SysResourcesService sysResourcesService;
 
     @Transactional
     public SysUserInfo register(SysUserInfo sysUserInfo) {
@@ -175,8 +179,10 @@ public class AuthService {
         return code.toString();
     }
 
-    public Object getUserInfo(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetailsServiceImpl.loadUserByUsername(userDetails.getUsername());
+    public UserDetails getUserInfo() {
+        LoginOutput user = (LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<ResourcesOutput> sysResources = sysResourcesService.currentUserMenuTree(user.getId());
+        user.setResources(sysResources);
+        return user;
     }
 }

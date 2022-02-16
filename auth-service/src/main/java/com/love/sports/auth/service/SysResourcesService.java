@@ -1,14 +1,17 @@
 package com.love.sports.auth.service;
 
 
+import com.love.sports.auth.config.constant.RedisCacheNameConstant;
 import com.love.sports.auth.entity.model.SysResources;
 import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.entity.model.SysUserInfo;
 import com.love.sports.auth.repository.SysResourcesRepository;
 import com.love.sports.auth.repository.SysUserInfoRepository;
+import com.love.sports.outs.ResourcesOutput;
 import com.love.sports.utils.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -18,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -37,7 +38,7 @@ public class SysResourcesService {
     private SysResourcesRepository sysResourcesRepository;
 
     @Resource
-    SysUserInfoRepository sysUserInfoRepository;
+    private SysUserInfoRepository sysUserInfoRepository;
 
     @Resource
     private SysRoleService sysRoleService;
@@ -70,7 +71,15 @@ public class SysResourcesService {
         sysResourcesRepository.deleteById(id);
     }
 
+    /**
+     * 更新资源，同时将所有的角色缓存删除
+     *
+     * @param sysResources 输入的资源
+     * @param id           要更新的资源ID
+     * @return 是否更新成功
+     */
     @Transactional
+    @CacheEvict(cacheNames = RedisCacheNameConstant.ROLES, allEntries = true, cacheManager = "sysCacheManager")
     public boolean update(SysResources sysResources, Integer id) {
         SysResources saved = findById(id);
         Assert.notNull(saved, "更新数据不存在");
@@ -109,5 +118,37 @@ public class SysResourcesService {
         return sysUserInfo.getRoles().stream().map(SysRole::getResources).findAny().orElse(null);
     }
 
+
+    /**
+     * 获取当前用户菜单树
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    public Collection<ResourcesOutput> currentUserMenuTree(String userId) {
+        SysUserInfo sysUserInfo = sysUserInfoRepository.findById(userId).orElse(null);
+        Assert.notNull(sysUserInfo, "用户不存在");
+        Set<SysResources> userMenus = sysResourcesRepository.findUserMenus(userId);
+
+        List<ResourcesOutput> outs = new ArrayList<>(userMenus.size());
+
+        userMenus.forEach(resource -> {
+            ResourcesOutput resourcesOutput = ResourcesOutput.builder()
+                    .id(resource.getId())
+                    .parentId(resource.getParentId())
+                    .resName(resource.getResName())
+                    .resIcon(resource.getResIcon())
+                    .resPath(resource.getResPath())
+                    .httpMethod(resource.getHttpMethod().name())
+                    .resType(resource.getResType().name())
+                    .root(resource.getRoot())
+                    .resSort(resource.getResSort())
+                    .clientId(resource.getClientId())
+                    .build();
+
+            outs.add(resourcesOutput);
+        });
+        return TreeUtils.buildTree(outs);
+    }
 }
 

@@ -2,6 +2,7 @@ package com.love.sports.auth.service;
 
 import com.love.sports.auth.LoveSportsAuthApplicationTests;
 import com.love.sports.auth.entity.model.SysResources;
+import com.love.sports.outs.ResourcesOutput;
 import com.love.sports.utils.TreeUtils;
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +23,11 @@ public class SysResourcesServiceTest extends LoveSportsAuthApplicationTests {
     void findAllCurrentUserAllowResourcesTest() {
         Collection<SysResources> resources = sysResourcesService.currentUserAllowTreeResources("1");
         Collection<SysResources> tree = TreeUtils.buildTree(resources);
+    }
+
+    @Test
+    void currentUserMenuTree() {
+        Collection<ResourcesOutput> resources = sysResourcesService.currentUserMenuTree("1");
+        System.out.println(resources);
     }
 }

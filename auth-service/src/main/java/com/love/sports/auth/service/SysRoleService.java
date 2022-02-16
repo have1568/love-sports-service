@@ -1,6 +1,7 @@
 package com.love.sports.auth.service;
 
 
+import com.love.sports.auth.config.constant.RedisCacheNameConstant;
 import com.love.sports.auth.entity.model.SysResources;
 import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.repository.SysResourcesRepository;
@@ -8,6 +9,8 @@ import com.love.sports.auth.repository.SysRoleRepository;
 import com.love.sports.outs.LoginOutput;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +39,6 @@ public class SysRoleService {
     @Resource
     private SysRoleRepository sysRoleRepository;
 
-
     @Resource
     private SysResourcesRepository sysResourcesRepository;
 
@@ -49,6 +51,7 @@ public class SysRoleService {
 
 
     @Transactional
+    @CacheEvict(cacheNames = RedisCacheNameConstant.ROLES, key = "#id", cacheManager = "sysCacheManager")
     public boolean deleteById(Integer id) {
         Optional<SysRole> optional = sysRoleRepository.findById(id);
         if (optional.isPresent()) {
@@ -63,7 +66,9 @@ public class SysRoleService {
         sysRoleRepository.deleteById(id);
     }
 
+
     @Transactional
+    @CachePut(cacheNames = RedisCacheNameConstant.ROLES, key = "#id", cacheManager = "sysCacheManager")
     public boolean update(SysRole sysRole, Integer id) {
         SysRole saved = findById(id);
         Assert.notNull(saved, "更新数据不存在");
@@ -113,10 +118,8 @@ public class SysRoleService {
     }
 
     public Page<SysRole> findByCondition(Pageable page) {
-//        Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
-//        return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
-
-        return sysRoleRepository.findAll(page);
+        Integer roleLevel = ((LoginOutput) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoleLevel();
+        return sysRoleRepository.findByRoleLevelGreaterThanEqual(roleLevel, page);
     }
 
     private List<SysResources> getAndVerifyResources(SysRole sysRole) {
@@ -128,7 +131,5 @@ public class SysRoleService {
         }
         return sysResources;
     }
-
-
 }
 

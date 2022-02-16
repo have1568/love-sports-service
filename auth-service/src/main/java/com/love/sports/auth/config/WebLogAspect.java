@@ -10,6 +10,8 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -55,6 +57,8 @@ public class WebLogAspect {
         WebHttpInfo webHttpInfo = webHttpInfoLocal.get();
         webHttpInfo.setRes(ret);
         webHttpInfo.setSpendTime(System.currentTimeMillis() - startTime.get());
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        webHttpInfo.setUsername(userDetails.getUsername());
         startTime.remove();
         webHttpInfoLocal.remove();
         log.info(jacksonObjectMapper.writeValueAsString(webHttpInfo));
@@ -70,6 +74,7 @@ public class WebLogAspect {
         private Object args;
         private Object res;
         private long spendTime;
+        private String username;
 
 
         public WebHttpInfo(String ip, String url, String httpMethod, Object args) {

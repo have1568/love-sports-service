@@ -1,6 +1,6 @@
 spring:
   application:
-    name: love-sports-auth
+    name: love-sports-file
   cloud:
     nacos:
       config:

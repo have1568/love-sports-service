@@ -4,6 +4,7 @@ package com.love.sports.auth.controller;
 import com.love.sports.auth.entity.model.SysResources;
 import com.love.sports.auth.service.SysResourcesService;
 import com.love.sports.auth.web.BaseController;
+import com.love.sports.outs.ResourcesOutput;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -54,6 +55,16 @@ public class SysResourcesController implements BaseController<SysResources> {
         return ok(sysResourcesService.findAllForSelect());
     }
 
+
+    /**
+     * 获取用户的菜单树
+     * @param userId
+     * @return
+     */
+    @GetMapping("/user/menu/tree")
+    public ResponseEntity<Collection<ResourcesOutput>> currentUserMenuTree(@RequestParam String userId) {
+        return ResponseEntity.ok(sysResourcesService.currentUserMenuTree(userId));
+    }
 
     /**
      * 获取所有用于选择附件

@@ -1,10 +1,13 @@
 package com.love.sports.auth.service;
 
 
+import com.love.sports.auth.config.constant.RedisCacheNameConstant;
 import com.love.sports.auth.entity.model.SysClientDetail;
 import com.love.sports.auth.repository.SysClientDetailRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +44,7 @@ public class SysClientDetailService {
     }
 
 
+    @CacheEvict(cacheNames = RedisCacheNameConstant.CLIENTS, key = "#id", cacheManager = "sysCacheManager")
     @Transactional
     public boolean deleteById(String id) {
         delete(id);
@@ -51,7 +55,9 @@ public class SysClientDetailService {
         sysClientDetailRepository.deleteById(id);
     }
 
+
     @Transactional
+    @CachePut(cacheNames = RedisCacheNameConstant.CLIENTS, key = "#id", cacheManager = "sysCacheManager")
     public boolean update(SysClientDetail sysClientDetail, String id) {
         SysClientDetail saved = findById(id);
         Assert.notNull(saved, "更新数据不存在");
@@ -80,7 +86,7 @@ public class SysClientDetailService {
     }
 
     public List<SysClientDetail> findAllClients() {
-       return sysClientDetailRepository.findByClientType(SysClientDetail.ClientType.CLIENT);
+        return sysClientDetailRepository.findByClientType(SysClientDetail.ClientType.CLIENT);
     }
 }
 

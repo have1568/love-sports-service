@@ -1,16 +1,17 @@
 package com.love.sports.auth.service;
 
 
+import com.love.sports.auth.entity.model.QSysUserInfo;
 import com.love.sports.auth.entity.model.SysRole;
 import com.love.sports.auth.entity.model.SysUserInfo;
 import com.love.sports.auth.repository.SysRoleRepository;
 import com.love.sports.auth.repository.SysUserInfoRepository;
-import com.love.sports.auth.entity.model.QSysUserInfo;
 import com.love.sports.utils.ObjectUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
