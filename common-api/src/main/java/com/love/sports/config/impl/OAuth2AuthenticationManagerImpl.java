@@ -1,19 +1,24 @@
-package com.love.sports.file.config;
+package com.love.sports.config.impl;
 
 import com.love.sports.outs.GrantedAuthorityOut;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,17 +27,24 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 
 @Slf4j
 @Configuration
+@ConditionalOnMissingBean(OAuth2AuthenticationManagerImpl.class)
 public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager {
 
     @Resource
     private DefaultTokenServices defaultTokenServices;
 
+    @Resource
+    private ClientDetailsService clientDetailsServiceImpl;
+
+
     @Value("${spring.application.name}")
     private String resourceId;
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -51,6 +63,8 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
             throw new OAuth2AccessDeniedException("Invalid token does not contain resource id (" + resourceId + ")");
         }
 
+        //校验客户端Scope配置
+        checkClientDetails(auth);
 
         //检查当前url是否在用户的权限列表里
         checkCurrentUrlIsMatch(auth);
@@ -71,7 +85,7 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
 
     private void checkCurrentUrlIsMatch(OAuth2Authentication auth) {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
+        Assert.notNull(requestAttributes, "request not be null");
         HttpServletRequest request = requestAttributes.getRequest();
         String currentUrl = request.getRequestURI();
         Collection<GrantedAuthority> authorities = auth.getAuthorities();
@@ -100,6 +114,25 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
 
     @Override
     public void afterPropertiesSet() {
+        Assert.state(defaultTokenServices != null, "TokenServices are required");
+        Assert.state(clientDetailsServiceImpl != null, "ClientDetailsService are required");
+    }
 
+    private void checkClientDetails(OAuth2Authentication auth) {
+        if (clientDetailsServiceImpl != null) {
+            ClientDetails client;
+            try {
+                client = clientDetailsServiceImpl.loadClientByClientId(auth.getOAuth2Request().getClientId());
+            } catch (ClientRegistrationException e) {
+                throw new OAuth2AccessDeniedException("Invalid token contains invalid client id");
+            }
+            Set<String> allowed = client.getScope();
+            for (String scope : auth.getOAuth2Request().getScope()) {
+                if (!allowed.contains(scope)) {
+                    throw new OAuth2AccessDeniedException(
+                            "Invalid token contains disallowed scope (" + scope + ") for this client");
+                }
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.love.sports.file.web;
+package com.love.sports.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

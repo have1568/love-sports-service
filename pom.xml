@@ -26,7 +26,7 @@
         <module>gateway</module>
         <module>auth-service</module>
         <module>play-service</module>
-        <module>service-api</module>
+        <module>common-api</module>
         <module>file-service</module>
     </modules>
     <dependencyManagement>

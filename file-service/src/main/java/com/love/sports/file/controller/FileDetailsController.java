@@ -2,7 +2,7 @@ package com.love.sports.file.controller;
 
 import com.love.sports.file.entity.model.FileDetails;
 import com.love.sports.file.service.FileDetailsService;
-import com.love.sports.file.web.BaseController;
+import com.love.sports.controller.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

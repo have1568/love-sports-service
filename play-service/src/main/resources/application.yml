@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8084
 spring:
   application:
     name: love-sports-play
@@ -9,21 +9,42 @@ spring:
     database: 1
     password: 123456
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
     name: defaultDataSource
     password: 123456
-    url: jdbc:mysql://localhost:3306/love-sports-play?serverTimezone=UTC
-    username: root
+    url: jdbc:postgresql://192.168.1.116:5432/love-sports-play
+    username: postgres
   jpa:
     show-sql: true
     open-in-view: true
     hibernate:
       ddl-auto: update
+dubbo:
+  application:
+    name: ${spring.application.name}
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://192.168.1.111:8848
+    username: nacos
+    password: nacos
+    group: dubbo
+  config-center:
+    address: nacos://192.168.1.111:8848
+    namespace: dubbo
+    username: nacos
+    password: nacos
+    group: dubbo
+  metadata-report:
+    address: nacos://192.168.1.111:8848
+    username: nacos
+    password: nacos
+    group: dubbo
 logging:
-  pattern:
-    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(-){faint} %clr([%14.14t]){faint} %clr(%-40.40logger.%13.13M){cyan} %clr(%3.3L) %clr(:){faint} %msg%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
-  level:
-    root: INFO
-    org.springframework.web: INFO
-    org.springframework.security: DEBUG
-    org.springframework.boot.autoconfigure: INFO
+  file:
+    path: classpath:logback-spring.xml
+provider:
+  application:
+    name: love-sports-auth

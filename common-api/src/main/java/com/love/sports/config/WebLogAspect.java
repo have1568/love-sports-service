@@ -1,4 +1,4 @@
-package com.love.sports.auth.config;
+package com.love.sports.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,7 @@ public class WebLogAspect {
     private final ThreadLocal<Long> startTime = new ThreadLocal<>();
     private final ThreadLocal<WebHttpInfo> webHttpInfoLocal = new ThreadLocal<>();
 
-    @Pointcut("execution(public * com.love.sports.auth.controller.*.*(..))")
+    @Pointcut("execution(public * com.love.sports.*.controller.*.*(..))")
     public void webLog() {
     }
 

@@ -3,7 +3,7 @@ package com.love.sports.auth.controller;
 
 import com.love.sports.auth.entity.model.SysResources;
 import com.love.sports.auth.service.SysResourcesService;
-import com.love.sports.auth.web.BaseController;
+import com.love.sports.controller.BaseController;
 import com.love.sports.outs.ResourcesOutput;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;

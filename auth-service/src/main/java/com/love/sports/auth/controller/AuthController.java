@@ -5,7 +5,7 @@ import com.love.sports.auth.event.EmailCheckEvent;
 import com.love.sports.auth.event.PhoneCheckEvent;
 import com.love.sports.auth.event.ResetPasswordEvent;
 import com.love.sports.auth.service.AuthService;
-import com.love.sports.auth.web.BaseController;
+import com.love.sports.controller.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

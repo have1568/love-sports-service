@@ -3,7 +3,7 @@ package com.love.sports.auth.controller;
 
 import com.love.sports.auth.entity.model.SysUserInfo;
 import com.love.sports.auth.service.SysUserInfoService;
-import com.love.sports.auth.web.BaseController;
+import com.love.sports.controller.BaseController;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

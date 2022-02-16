@@ -1,4 +1,4 @@
-package com.love.sports.file.config.impl;
+package com.love.sports.config.impl;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;

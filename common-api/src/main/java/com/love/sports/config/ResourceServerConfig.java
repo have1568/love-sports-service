@@ -1,44 +1,35 @@
-package com.love.sports.file.config;
+package com.love.sports.config;
 
+import com.love.sports.config.impl.OAuth2AuthenticationManagerImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-
-import javax.annotation.Resource;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Value("${spring.application.name}")
     private String resourceName;
 
-    private final OAuth2AuthenticationManagerImpl oauth2AuthenticationManagerImpl;
+    private final OAuth2AuthenticationManagerImpl authenticationManagerImpl;
 
-    @Resource
-    private final DefaultTokenServices defaultTokenServices;
-
-    public ResourceServerConfig(OAuth2AuthenticationManagerImpl oauth2AuthenticationManagerImpl, DefaultTokenServices defaultTokenServices) {
-        this.oauth2AuthenticationManagerImpl = oauth2AuthenticationManagerImpl;
-        this.defaultTokenServices = defaultTokenServices;
+    public ResourceServerConfig(OAuth2AuthenticationManagerImpl authenticationManagerImpl) {
+        this.authenticationManagerImpl = authenticationManagerImpl;
     }
 
+    //只拦截API相关接口 EnableResourceServer 先于 EnableWebSecurity 会导致 拦截或者不拦截的接口失效
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated();
+        http.antMatcher("/api/**").authorizeRequests().anyRequest().authenticated();
     }
-
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-
-        resources.tokenServices(defaultTokenServices);
+        resources.authenticationManager(authenticationManagerImpl);
         resources.resourceId(resourceName);
-        resources.authenticationManager(oauth2AuthenticationManagerImpl);
-
     }
 }
