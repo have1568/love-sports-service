@@ -1,6 +1,5 @@
-package com.love.sports.config;
+package com.love.sports.auth.config;
 
-import com.love.sports.config.impl.OAuth2AuthenticationManagerImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

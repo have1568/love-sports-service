@@ -1,10 +1,11 @@
-package com.love.sports.config.impl;
+package com.love.sports.play.config;
 
 import com.love.sports.outs.GrantedAuthorityOut;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,13 +33,13 @@ import java.util.Set;
 
 @Slf4j
 @Configuration
-@ConditionalOnMissingBean(OAuth2AuthenticationManagerImpl.class)
+@Primary
 public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager {
 
     @Resource
     private DefaultTokenServices defaultTokenServices;
 
-    @Resource
+    @Autowired(required = false)
     private ClientDetailsService clientDetailsServiceImpl;
 
 
@@ -50,16 +51,20 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         if (authentication == null) {
+            log.info("Invalid token (token not found)");
             throw new InvalidTokenException("Invalid token (token not found)");
         }
         String token = (String) authentication.getPrincipal();
         OAuth2Authentication auth = defaultTokenServices.loadAuthentication(token);
         if (auth == null) {
+            log.info("Invalid token: " + token);
             throw new InvalidTokenException("Invalid token: " + token);
         }
 
         Collection<String> resourceIds = auth.getOAuth2Request().getResourceIds();
         if (resourceId != null && resourceIds != null && !resourceIds.isEmpty() && !resourceIds.contains(resourceId)) {
+            log.info("Invalid token does not contain resource id (" + resourceId + ")");
+
             throw new OAuth2AccessDeniedException("Invalid token does not contain resource id (" + resourceId + ")");
         }
 
@@ -115,7 +120,6 @@ public class OAuth2AuthenticationManagerImpl extends OAuth2AuthenticationManager
     @Override
     public void afterPropertiesSet() {
         Assert.state(defaultTokenServices != null, "TokenServices are required");
-        Assert.state(clientDetailsServiceImpl != null, "ClientDetailsService are required");
     }
 
     private void checkClientDetails(OAuth2Authentication auth) {

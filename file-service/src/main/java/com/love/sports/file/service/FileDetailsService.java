@@ -105,7 +105,7 @@ public class FileDetailsService {
                 .fileOriginalName(file.getOriginalFilename())
                 .extension(extension)
                 .contentType(file.getContentType())
-                .size(file.getSize())
+                .fileSize(file.getSize())
                 .createAt(LocalDateTime.now())
                 .createBy(userDetails.getUsername())
                 .updateAt(LocalDateTime.now())

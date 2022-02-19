@@ -34,7 +34,7 @@ public class FileDetails implements Serializable {
     private String targetLocation;
     private String extension;
     private String contentType;
-    private long size;
+    private Long fileSize;
     private String createBy;
     private LocalDateTime createAt;
     private String updateBy;

@@ -1,0 +1,39 @@
+server:
+  port: 8087
+spring:
+  redis:
+    host: 192.168.1.111
+    port: 6379
+    database: 1
+    password: 123456
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    name: defaultDataSource
+    password: 123456
+    url: jdbc:postgresql://192.168.1.116:5432/love-sports-admin
+    username: postgres
+  jpa:
+    show-sql: true
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        include: "*"
+flowable:
+  check-process-definitions: false
+  database-schema-update: true
+  history-level: full
+  db-history-used: true
+
+file:
+  diagram:
+    path: /Users/fengli/diagram/
+
+logging:
+  file:
+    path: classpath:logback-spring.xml
+logback:
+  log:
+    home: "E://mnt/log/"

@@ -14,3 +14,6 @@ spring:
         namespace: public
         username: nacos
         password: nacos
+logback:
+  log:
+    home: "E://mnt/log/"

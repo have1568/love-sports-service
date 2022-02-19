@@ -19,6 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@RequestMapping("/api/file")
 public class UploadAndDownloadController {
 
 
@@ -29,18 +30,18 @@ public class UploadAndDownloadController {
     }
 
 
-    @PostMapping("/uploadFile")
+    @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(fileService.saveFile(file));
     }
 
 
-    @PostMapping("/uploadFiles")
+    @PostMapping("/batchUpload")
     public ResponseEntity<List<String>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return ResponseEntity.ok(fileService.batchSaveFile(files));
     }
 
-    @GetMapping("/downloadFile/{id}")
+    @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String id) {
         // Load file as Resource
         ResourceWrapper resourceWrapper = fileService.loadFileAsResource(id);
