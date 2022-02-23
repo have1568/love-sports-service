@@ -1,6 +1,5 @@
 package com.love.sports.outs;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public class LoginOutput implements Output, UserDetails {
 
     private String id;
     @JsonIgnore
-    @JSONField(serialize = false)
     private String password;
     private final String username;
     private final String nickName;

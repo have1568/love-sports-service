@@ -3,6 +3,7 @@ package com.love.sports.play.service;
 import com.love.sports.dubbo.dto.UserDTO;
 import com.love.sports.play.LoveSportsPlayApplicationTests;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Commit;
 
 import javax.annotation.Resource;
 
@@ -22,5 +23,11 @@ class PlayUserServiceTest extends LoveSportsPlayApplicationTests {
     void getUserInfo() {
         UserDTO userInfo = playUserService.getUserInfo("1");
         System.out.println(userInfo);
+    }
+
+    @Commit
+    @Test
+    void test1() {
+        playUserService.test();
     }
 }

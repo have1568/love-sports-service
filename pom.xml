@@ -17,10 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <springfox-version>3.0.0</springfox-version>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
-        <spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
-        <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+        <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+        <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <querydsl.version>>4.3.1</querydsl.version>
+        <spring.context.support.version>1.0.11</spring.context.support.version>
     </properties>
     <modules>
         <module>gateway</module>
@@ -28,6 +29,7 @@
         <module>play-service</module>
         <module>common-api</module>
         <module>file-service</module>
+        <module>manage-service</module>
     </modules>
     <dependencyManagement>
         <dependencies>

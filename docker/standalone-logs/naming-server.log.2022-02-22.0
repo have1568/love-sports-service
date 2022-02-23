@@ -1,0 +1,194 @@
+2022-02-22 21:13:32,276 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:13:32,276 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:13:32,338 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:13:32,349 INFO listen for service meta change
+
+2022-02-22 21:13:32,351 INFO upgrade.state file is not exist
+
+2022-02-22 21:15:38,557 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:15:38,557 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:15:38,618 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:15:38,619 INFO listen for service meta change
+
+2022-02-22 21:16:21,495 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:16:21,495 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:16:21,563 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:16:21,563 INFO listen for service meta change
+
+2022-02-22 21:16:21,566 INFO upgrade.state file is not exist
+
+2022-02-22 21:18:34,947 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:18:34,947 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:18:35,003 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:18:35,003 INFO listen for service meta change
+
+2022-02-22 21:18:35,006 INFO upgrade.state file is not exist
+
+2022-02-22 21:23:43,767 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:23:43,767 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:23:43,831 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:23:43,831 INFO listen for service meta change
+
+2022-02-22 21:23:43,834 INFO upgrade.state file is not exist
+
+2022-02-22 21:25:32,029 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:25:32,029 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:25:32,089 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:25:32,089 INFO listen for service meta change
+
+2022-02-22 21:25:32,091 INFO upgrade.state file is not exist
+
+2022-02-22 21:27:06,082 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:27:06,082 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:27:06,154 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:27:06,154 INFO listen for service meta change
+
+2022-02-22 21:27:06,158 INFO upgrade.state file is not exist
+
+2022-02-22 21:31:04,428 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:31:04,428 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:31:04,505 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:31:04,505 INFO listen for service meta change
+
+2022-02-22 21:31:04,508 INFO upgrade.state file is not exist
+
+2022-02-22 21:32:34,011 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:32:34,011 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:32:34,074 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:32:34,074 INFO listen for service meta change
+
+2022-02-22 21:32:34,077 INFO upgrade.state file is not exist
+
+2022-02-22 21:32:34,722 INFO [SelectorManager] Load SelectorContextBuilder(class com.alibaba.nacos.naming.selector.context.CmdbSelectorContextBuilder) contextType(CMDB) successfully.
+
+2022-02-22 21:32:34,722 INFO [SelectorManager] Load Selector(class com.alibaba.nacos.naming.selector.CmdbLabelSelector) type(label) contextType(CMDB) successfully.
+
+2022-02-22 21:32:35,334 INFO Load instance extension handler []
+
+2022-02-22 21:56:24,493 WARN [NamingServerHttpClientManager] Start destroying HTTP-Client
+
+2022-02-22 21:56:24,503 WARN [NamingServerHttpClientManager] Destruction of the end
+
+2022-02-22 21:56:25,697 ERROR [HEALTH-CHECK] error while processing NIO task
+
+java.lang.InterruptedException: null
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2014)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2088)
+	at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)
+	at com.alibaba.nacos.naming.healthcheck.TcpSuperSenseProcessor.processTask(TcpSuperSenseProcessor.java:137)
+	at com.alibaba.nacos.naming.healthcheck.TcpSuperSenseProcessor.run(TcpSuperSenseProcessor.java:154)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2022-02-22 21:56:25,697 ERROR [HEALTH-CHECK-V2] error while processing NIO task
+
+java.lang.InterruptedException: null
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2014)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2088)
+	at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)
+	at com.alibaba.nacos.naming.healthcheck.v2.processor.TcpHealthCheckProcessor.processTask(TcpHealthCheckProcessor.java:122)
+	at com.alibaba.nacos.naming.healthcheck.v2.processor.TcpHealthCheckProcessor.run(TcpHealthCheckProcessor.java:139)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2022-02-22 21:56:39,428 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:56:39,428 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:56:39,486 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:56:39,487 INFO listen for service meta change
+
+2022-02-22 21:56:39,489 INFO upgrade.state file is not exist
+
+2022-02-22 21:56:40,128 INFO [SelectorManager] Load SelectorContextBuilder(class com.alibaba.nacos.naming.selector.context.CmdbSelectorContextBuilder) contextType(CMDB) successfully.
+
+2022-02-22 21:56:40,129 INFO [SelectorManager] Load Selector(class com.alibaba.nacos.naming.selector.CmdbLabelSelector) type(label) contextType(CMDB) successfully.
+
+2022-02-22 21:56:40,753 INFO Load instance extension handler []
+
+2022-02-22 21:58:04,726 WARN [NamingServerHttpClientManager] Start destroying HTTP-Client
+
+2022-02-22 21:58:04,736 WARN [NamingServerHttpClientManager] Destruction of the end
+
+2022-02-22 21:58:06,230 ERROR [HEALTH-CHECK] error while processing NIO task
+
+java.lang.InterruptedException: null
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2014)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2088)
+	at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)
+	at com.alibaba.nacos.naming.healthcheck.TcpSuperSenseProcessor.processTask(TcpSuperSenseProcessor.java:137)
+	at com.alibaba.nacos.naming.healthcheck.TcpSuperSenseProcessor.run(TcpSuperSenseProcessor.java:154)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2022-02-22 21:58:06,230 ERROR [HEALTH-CHECK-V2] error while processing NIO task
+
+java.lang.InterruptedException: null
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2014)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2088)
+	at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)
+	at com.alibaba.nacos.naming.healthcheck.v2.processor.TcpHealthCheckProcessor.processTask(TcpHealthCheckProcessor.java:122)
+	at com.alibaba.nacos.naming.healthcheck.v2.processor.TcpHealthCheckProcessor.run(TcpHealthCheckProcessor.java:139)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2022-02-22 21:59:26,857 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 21:59:26,857 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 21:59:26,917 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 21:59:26,917 INFO listen for service meta change
+
+2022-02-22 21:59:26,920 INFO upgrade.state file is not exist
+
+2022-02-22 22:00:59,787 WARN naming.distro config will be removed, please use core.protocol.distro replace.
+
+2022-02-22 22:00:59,787 WARN Using naming.distro config to replace core.distro config
+
+2022-02-22 22:00:59,850 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2022-02-22 22:00:59,850 INFO listen for service meta change
+
+2022-02-22 22:01:00,620 INFO [SelectorManager] Load SelectorContextBuilder(class com.alibaba.nacos.naming.selector.context.CmdbSelectorContextBuilder) contextType(CMDB) successfully.
+
+2022-02-22 22:01:00,620 INFO [SelectorManager] Load Selector(class com.alibaba.nacos.naming.selector.CmdbLabelSelector) type(label) contextType(CMDB) successfully.
+
+2022-02-22 22:01:01,131 INFO Load instance extension handler []
+

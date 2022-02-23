@@ -19,7 +19,17 @@ spring:
     open-in-view: true
     hibernate:
       ddl-auto: update
+seata:
+  tx-service-group: ${spring.application.name}
+  service:
+    grouplist:
+      seata-server: 192.168.1.111:8091
+  client:
+    tm:
+      degrade-check: false
 dubbo:
+  cloud:
+    subscribed-services: ${provider.application.name}
   application:
     name: ${spring.application.name}
   protocol:

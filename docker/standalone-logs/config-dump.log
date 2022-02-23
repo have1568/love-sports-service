@@ -1,0 +1,20 @@
+2022-02-23 07:54:05,195 INFO [dump-all-ok] love-sports-gateway-dev.yaml+DEFAULT_GROUP, 1639665587000, length=1136, md5=f7d5946cc3f9c7304d591187b6d1faf6
+
+2022-02-23 07:54:05,198 INFO [dump-all-ok] love-sports-user-dev.yaml+DEFAULT_GROUP, 1637685335000, length=716, md5=8c5b9742f1f41a8c08ff6a2252ff7415
+
+2022-02-23 07:54:05,198 INFO [dump-all-ok] gateway-custom-data.yaml+DEFAULT_GROUP, 1637501504000, length=315, md5=88605d6df6e929f4a67104e5f4168c39
+
+2022-02-23 07:54:05,199 INFO [dump-all-ok] auth-dev.yaml+DEFAULT_GROUP, 1637746202000, length=716, md5=8c5b9742f1f41a8c08ff6a2252ff7415
+
+2022-02-23 07:54:05,199 INFO [dump-all-ok] gateway-dev.yaml+DEFAULT_GROUP, 1644913453000, length=1399, md5=46cd880df5b052999be33166bfd16243
+
+2022-02-23 07:54:05,200 INFO [dump-all-ok] com.love.sports.dubbo.service.UserService:::provider:love-sports-auth+dubbo, 1645362664000, length=1744, md5=60a3b58c1808d724195a73afd0ff8a91
+
+2022-02-23 07:54:05,201 INFO [dump-all-ok] com.alibaba.cloud.dubbo.service.DubboMetadataService:1.0.0:love-sports-auth:provider:love-sports-auth+dubbo, 1645362665000, length=1547, md5=863c4da6983a90975c34f6dce77b8ab5
+
+2022-02-23 07:54:05,201 INFO [dump-all-ok] com.alibaba.cloud.dubbo.service.DubboMetadataService:1.0.0:love-sports-auth:consumer:love-sports-play+dubbo, 1645362684000, length=330, md5=aeead15d969c3b6e0897410e8a1d0001
+
+2022-02-23 07:54:05,201 INFO [dump-all-ok] com.love.sports.dubbo.service.UserService:::consumer:love-sports-play+dubbo, 1645519634000, length=266, md5=c769c17022f41bfe3f1f9458f9825637
+
+2022-02-23 07:54:05,202 INFO [dump-all-ok] com.alibaba.cloud.dubbo.service.DubboMetadataService:1.0.0:love-sports-play:provider:love-sports-play+dubbo, 1645519639000, length=1547, md5=31ed8b3bc02bfd420351f831f72c3f4c
+

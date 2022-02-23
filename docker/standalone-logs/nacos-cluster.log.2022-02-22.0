@@ -1,0 +1,60 @@
+2022-02-22 21:13:32,259 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:13:32,259 WARN [serverlist] updated to : [Member{ip='a9429183988a', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:15:38,539 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:15:38,540 WARN [serverlist] updated to : [Member{ip='a9429183988a', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:16:21,470 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:16:21,471 WARN [serverlist] updated to : [Member{ip='6719957f34bd', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:18:34,929 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:18:34,930 WARN [serverlist] updated to : [Member{ip='69207a85b556', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:23:43,750 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:23:43,751 WARN [serverlist] updated to : [Member{ip='fad6b4a1d48b', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:25:32,011 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:25:32,012 WARN [serverlist] updated to : [Member{ip='aa53dddca913', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:27:06,065 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:27:06,066 WARN [serverlist] updated to : [Member{ip='e45cb374c7c8', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:31:04,410 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:31:04,411 WARN [serverlist] updated to : [Member{ip='8af12c2e468e', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:32:33,994 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:32:33,995 WARN [serverlist] updated to : [Member{ip='626e04870c9c', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:32:34,346 WARN [ClusterRpcClientProxy] success to refresh cluster rpc client on start up,members =[] 
+
+2022-02-22 21:32:35,945 INFO This node is ready to provide external services
+
+2022-02-22 21:56:39,411 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:56:39,412 WARN [serverlist] updated to : [Member{ip='nacos', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 21:56:39,754 WARN [ClusterRpcClientProxy] success to refresh cluster rpc client on start up,members =[] 
+
+2022-02-22 21:56:41,377 INFO This node is ready to provide external services
+
+2022-02-22 21:59:26,840 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 21:59:26,841 WARN [serverlist] updated to : [Member{ip='nacos', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 22:00:59,769 INFO Current addressing mode selection : StandaloneMemberLookup
+
+2022-02-22 22:00:59,770 WARN [serverlist] updated to : [Member{ip='nacos', port=8848, state=UP, extendInfo={raftPort=7848, version=2.0.3}}]
+
+2022-02-22 22:01:00,126 WARN [ClusterRpcClientProxy] success to refresh cluster rpc client on start up,members =[] 
+
+2022-02-22 22:01:01,780 INFO This node is ready to provide external services
+

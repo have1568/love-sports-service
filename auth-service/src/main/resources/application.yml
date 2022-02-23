@@ -20,7 +20,14 @@ spring:
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
+seata:
+  tx-service-group: ${spring.application.name}
+  service:
+    grouplist:
+      seata-server: 192.168.1.111:8091
 dubbo:
+  cloud:
+    subscribed-services: ${spring.application.name}
   application:
     name: ${spring.application.name}
   protocol:
